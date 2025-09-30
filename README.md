@@ -16,7 +16,7 @@ Team Name: Always Blue
 Team Members:
 - Matthew Biller (github: mbiller-student, email: mabi3900@colorado.edu)
 - Adam Cavins (github: AdamCavins, email: adca4871@colorado.edu)
-- Joo Han (github: , email: joha4925@colorado.edu)
+- Joo Han (github: joha4022, email: joha4925@colorado.edu)
 - Kalen Wiley (github: kalecodes, email: kawi8065@colorado.edu)
 - Travis Williams (github: CatchinPheeshCodes, email: trwi4612@colorado.edu)
   
@@ -24,7 +24,10 @@ Recurring Team Meeting: 8PM MT, Every Monday
 
 ## Project Management
 #### Development Method
-Our team will be following scrum mehtodology, organizing work into sprints, conducting weekly stand-up meetings, and frequent retro-spectives. We will be using Kanban to track feature progress. 
+Our team will be following scrum mehtodology, organizing work into sprints, conducting weekly stand-up meetings, and frequent retro-spectives. We will be using Kanban to track feature progress
+
+#### Project Tacking Software
+Trello: 
 
 #### Risk to Project Completion
 - Short project timeline
@@ -35,4 +38,3 @@ Our team will be following scrum mehtodology, organizing work into sprints, cond
 - Maintain open and frequent team communication
 - Leverage individual skills and interests in development process
 - Task sharing and support to ensure timeline coherence
-
