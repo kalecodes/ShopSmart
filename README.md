@@ -27,7 +27,7 @@ Recurring Team Meeting: 8PM MT, Every Monday
 Our team will be following scrum mehtodology, organizing work into sprints, conducting weekly stand-up meetings, and frequent retro-spectives. We will be using Kanban to track feature progress
 
 #### Project Tacking Software
-Trello: 
+Trello: [Shop Smart - Project Tracking](https://trello.com/invite/b/68db40156fb399b8971c3193/ATTIf8e6499080dbe32267da162e12e075caC0D4F221/shop-smart-project-tracking)
 
 #### Risk to Project Completion
 - Short project timeline
