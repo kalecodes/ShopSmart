@@ -1,0 +1,3 @@
+# ShopSmart Weekly Progress
+
+
