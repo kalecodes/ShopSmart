@@ -4,6 +4,11 @@
 ### Description
 The login page will allow the user to enter a username/password for an existing account or sign up for a new account if one does not already exist.  It will display the ShopSmart app logo.  After login, the user will be taken to their home page. 
 
+Desktop:<br>
+![Landing Page](md_images/Landing.png)
+Mobile:<br>
+<img src="./md_images/Landing-Mobile.png" width="200px">
+
 ### Parameters
 - ShopSmart logo
 - Fields for username and password
@@ -38,6 +43,11 @@ The login page will allow the user to enter a username/password for an existing 
 ### Description
 The new account page will allow new users to create an account with ShopSmart.  After a successful new account is created, the new user will be redirected to the homepage with empty containers and will be prompted to add a new item to get started with the application. 
 
+Desktop:<br>
+![Account Page](md_images/Account.png)
+Mobile:<br>
+<img src="./md_images/Account-Mobile.png" width="200px">
+
 ### Parameters
 - ShopSmart logo
 - New Account fields:
@@ -70,6 +80,11 @@ The new account page will allow new users to create an account with ShopSmart.  
 ### Description
 -The about page will contain a brief description of the ShopSmart app, how it can be used for the efficient management of commonly purchased items, answer frequently asked questions, and will contain a link to the login and new account pages. 
 
+Desktop:<br>
+![Home Page](md_images/About.png)
+Mobile:<br>
+<img src="./md_images/About-Mobile.png" width="200px">
+
 ### Parameters
 -ShopSmart Logo
 - Create Account Button
@@ -97,8 +112,10 @@ The new account page will allow new users to create an account with ShopSmart.  
 The home page will allow the user to add an item to an unassigned list of common purchases.  A list of common purchases that have been assigned
 to a store will also be displayed.  The user will be able to add a new store to the list of commonly visited retailers. <br>
 
-Mockup:<br>
-![Home Page](md_images/HomePageImg.png)
+Desktop:<br>
+![Home Page](md_images/Home.png)
+Mobile:<br>
+<img src="./md_images/Home-Mobile.png" width="200px">
 
 ### Parameters
 - Menu Button:
@@ -136,8 +153,14 @@ Mockup:<br>
 ### Description
 The shopping page will allow the user to access lists specific to each store that contains commonly purchased items.  The user will have access to a checklist of shopping items.  After completing the shopping list, the user can mark the trip complete. 
 
-Mockup:<br>
-![Shopping Page](md_images/ShoppingPageImg.png)
+Desktop:<br>
+![Shop Page](md_images/Shop-NewTrip.png)
+![Shop Page](md_images/Shop-ActiveTrip.png)
+
+Mobile:<br>
+<img src="./md_images/Shop-Mobile.png" width="200px">
+<img src="./md_images/Shop-ActiveTrip-Mobile.png" width="200px">
+
 
 ### Parameters
 - Menu Button:
