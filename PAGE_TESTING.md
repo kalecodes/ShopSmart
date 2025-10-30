@@ -27,17 +27,11 @@ Mobile:<br>
 - "Learn More" button: about page.
 
 ### List of Verification Tests
-- Username and password entry fields accept valid characters.
-- Verify that successful login redirects to user's home page.
-- Verify that dropdown feature expands to reveal the About Page button with hover/click.
+- Email field accepts valid characters.e
 - Button functionality:
-    - Login: Verify success only with valid credentials.
-    - New Account: Navigates to the correct page.
-    - Dropdown feature: Expands to reveal the about page button with hover/click.
-    - About Page Button: Redirects user to the about page. 
-- Error Handling:
-    - Incorrect login/password credentials & accompanying error message.
-    - Submission with empty fields.
+    - Sign In: Verify redirect to account page with log-in fields present
+    - Sign Up: Verify redirect to account page with sign-up fields present and email prefilled with user input from landing page
+    - Learn More Button: Redirects user to the about page. 
 
 ## Account Page
 ### Description
@@ -70,9 +64,14 @@ Mobile:<br>
 
 ### List of Verification Tests
 - New account fields accept valid characters
+- Log In fields accept valid characters
+- User password is hidden from display
 - Create account button validates new user data before creating a new homepage.
-- Upon successful validation, create account button takes user to homepage.
-- About Page Button and Existing User Button redirects to appropriate page successfully.
+- Upon successful from validation and submission, user is redirected to homepage.
+- Sign In / Sing Up button presents corresponding form to user
+- Error Handling:
+    - Incorrect login/password credentials & accompanying error message.
+    - Submission with empty fields.
 
 ## About Page
 ### Description
@@ -96,9 +95,8 @@ Mobile:<br>
 - "Sign In / Sign Up" button: landing page 
 
 ### List of Verification Tests
-- Verify that any product description or FAQ dropdowns are functional.
-- Verify that the drop down menu and about page buttons are functional. 
-- Verify that the new and existing account buttons are functional and redirect to the appropriate page.
+- Verify that any product description or feature descriptions are functional.
+- Verify that the Sign In / Sign Up button redirects to landing page
 
 ## Home Page
 ### Description
@@ -134,10 +132,9 @@ Mobile:<br>
 - Validate that all buttons redirect to the appropriate page. 
 - Validate that the add an item data entry field validates acceptable inputs.
 - Validate that new items are added to the unassigned list.
-- Validate that existing items are assigned to the correct store.
-- Validate that new items assigned to a store are added to the correct store when assigned.
+- Validate that existing items (in database) are re-activated and assigned to the correct store.
+- Validate that items assigned to a store are removed from the unassigned list and added to the correct store.
 - Validate that the add a store feature adds a new store.
-- Validate that new items can be added to a new store.
 
 ## Shop Page
 ### Description
@@ -175,12 +172,11 @@ Mobile:<br>
 
 ### List of Verification Tests
 - Validate that all of the users stores are available for selection.
-- Validate that commonly purchased items appear in the item list when a store is selected
-- Validate that unassigned items are added to a store when selected and assigned.
+- Validate that all active items assigned to a store appear in the item list when a store is selected
+- Validate that all active unassigned items are present in the unassigned list
 - Validate that items are marked 'shopped' when checked off of the list.
-- Validate that the selected store is highlighted.
 - Validate that all link buttons redirect to the appropriate page. 
-- Validate that the Complete Trip marks the store trip complete and changes the color of the selected store tab.
-- Validate that the user is prompted to confirm that the trip is complete, when the complete trip button is clicked before all shopping items are marked 'shopped'.
+- Validate that the Complete Trip marks the store trip complete
+- Validate that the user is prompted to confirm that the trip is complete, when the complete trip button is clicked before all shhopped items are removed from their respective lists.
 
 
