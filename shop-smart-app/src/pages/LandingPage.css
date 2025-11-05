@@ -1,26 +1,35 @@
 .landing-page {
-  max-width: 600px;
-  margin: 60px auto;
-  text-align: center;
+  max-width: 80vw;
+  margin: 50px auto;
   padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.landing-title {
-  font-size: 26px;
-  color: #3e67d6;
-  margin-bottom: 16px;
+.welcomeLottie {
+  width: 50vw;
 }
 
 .landing-text {
-  font-size: 16px;
+  max-width: 40vw;
+  margin: 50px;
+  font-size: 18px;
   color: #333;
-  margin-bottom: 24px;
 }
 
 .landing-buttons {
   display: flex;
   justify-content: center;
   gap: 20px;
+}
+
+.form-input {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 300px;
 }
 
 .landing-link {
@@ -34,4 +43,45 @@
 
 .landing-link:hover {
   background-color: #3457b2;
+}
+
+.features-section {
+  margin-top: 50px;
+  display: flex;
+  gap: 20px;
+}
+
+.feature-frame {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.item-image {
+  width: 100px;
+  height: 100px;
+  margin: 30px;
+}
+
+.feature-paragraph {
+  font-size: 18px;
+  color: #333;
+  padding: 10px;
+}
+
+.learn-div {
+  display: flex;
+  align-items: center;
+}
+
+.learn-link {
+  text-decoration: none;
+  background-color: #3e67d6;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
 }

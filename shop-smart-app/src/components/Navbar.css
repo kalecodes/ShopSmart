@@ -6,6 +6,17 @@
   padding: 12px 24px;
 }
 
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-image {
+  width: 28px;
+  height: 28px;
+}
+
 .navbar-brand {
   font-size: 20px;
   color: white;
