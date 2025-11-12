@@ -1,0 +1,39 @@
+.sign-in-page {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.sign-in-title {
+  font-size: 24px;
+  color: #3e67d6;
+  margin-bottom: 20px;
+}
+
+.sign-in-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-input {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.form-button {
+  background-color: #3e67d6;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.form-button:hover {
+  background-color: #3457b2;
+}
