@@ -1,0 +1,19 @@
+.shopping-page {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+.shopping-title {
+  font-size: 24px;
+  color: #3e67d6;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.shopping-text {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+  text-align: center;
+}

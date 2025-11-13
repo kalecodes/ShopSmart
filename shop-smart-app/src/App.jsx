@@ -1,45 +1,30 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/LandingPage.jsx";
+import NewAccountPage from "./pages/NewAccountPage.jsx";
+import SignInPage from "./pages/SignInPage.jsx";
+import AboutPage from "./pages/AboutPage.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import ShoppingPage from "./pages/ShoppingPage.jsx";
+import Navbar from "./components/Navbar.jsx";
+import Footer from "./components/Footer.jsx";
 
-function App() {
-  const [count, setCount] = useState(0);
-  const [currTime, setCurrTime] = useState(null);
-
-  useEffect(() => {
-    fetch('/api/time').then(res => res.json()).then(data => {
-      setCurrTime(data.time);
-    })
-  }, []);
-
+export default function App() {
   return (
-    <>
+    <Router>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/new-account" element={<NewAccountPage />} />
+            <Route path="/sign-in" element={<SignInPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/shopping" element={<ShoppingPage />} />
+          </Routes>
+        </main>
+        <Footer />
       </div>
-      <h1>ShopSmart</h1>
-      <h3>Built with Vite + React</h3>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>The current time is {currTime === null ? 'Unreachable' : new Date(currTime * 1000).toLocaleString()}</p>
-        <p>If you see a time above, and not "Unreachable", then the api connection is working</p>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
-
-export default App

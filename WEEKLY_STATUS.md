@@ -1,5 +1,27 @@
 # ShopSmart Weekly Progress
 
+<img width="1910" height="943" alt="Screenshot 2025-11-12 101051" src="https://github.com/user-attachments/assets/2dc9e577-5d9c-4198-8589-9870a8eb4fe5" />
+
+### Date 11/12/2025
+
+Update: These past two weeks the team has continued dev work: 
+* Introduced a styled and operational frontend, with continued enhancements on the way
+* Introduced a SQL database developed with SQLite
+* Contined work on the backend to connect the frontend and database
+* Continued UI enhancements
+
+--------------------------
+
+<img width="1834" height="934" alt="Screenshot 2025-10-30 at 7 58 58 PM" src="https://github.com/user-attachments/assets/3a8c0957-5cab-4571-99cc-4769ab2e4453" />
+
+
+### Date 10/30/2025
+
+Update: This week as a team, we went over the work that was completed for the web page designs. The web pages are currently in a wireframe state, but contain everything we need to begin developing and styling the pages. We also discussed the SQL database that we began implementing. We have started the initial phases of database development, with a database that contains four tables, all necessary for our app. 
+
+For this upcoming week, we are beginning work on the backend. As a team we are looking into different methods that will allow our frontend webpages to communicate with our backend, which will ultimately communicate with our database. This is the next big task we're looking to begin development on as this will be the step that ties all the pieces together. This work will continue for the next couple weeks.
+
+#
 <img width="1913" height="944" alt="image" src="https://github.com/user-attachments/assets/491c2b46-5919-4784-9e3c-0d89dadbce87" />
 
 ### Date 10/24/2025
