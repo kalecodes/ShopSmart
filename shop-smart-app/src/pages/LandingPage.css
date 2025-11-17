@@ -24,7 +24,7 @@
   gap: 20px;
 }
 
-.form-input {
+.form-input-landing {
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 6px;
@@ -33,7 +33,7 @@
 }
 
 .landing-link {
-  text-decoration: none;
+  border: none;
   background-color: #3e67d6;
   color: white;
   padding: 10px 20px;
