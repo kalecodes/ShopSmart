@@ -2,8 +2,17 @@ import "./LandingPage.css";
 import Lottie from "lottie-react";
 import welcomeLottie from "../assets/welcomeLottieWhite.json";
 import box from "../assets/box.png";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+
+  function handleSignUp() {
+    navigate(`/new-account?email=${encodeURIComponent(email)}`);
+  }
+
   return (
     <div className="landing-page">
       <Lottie animationData={welcomeLottie} loop={false} className="welcomeLottie"></Lottie>
@@ -13,10 +22,10 @@ export default function LandingPage() {
         never been easier.
       </p>
       <div className="landing-buttons">
-        <input type="email" placeholder="Email" className="form-input" />
-        <a href="/new-account" className="landing-link">
+        <input type="email" placeholder="Email" className="form-input-landing" value={email} onChange={(e) => setEmail(e.target.value)}/>
+        <button onClick={handleSignUp} className="landing-link">
           Sign Up
-        </a>
+        </button>
       </div>
       <div className="features-section">
         {/* eventually we will need to add a function to pull these information from 
