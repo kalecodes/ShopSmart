@@ -40,6 +40,7 @@ def create(db_filename):
 			Name TEXT NOT NULL,
 			UserID INT,
 			StoreID INT,
+            Status INT,
 
 			FOREIGN KEY(UserID) REFERENCES User(idUser),
 			FOREIGN KEY(StoreID) REFERENCES Store(idStore)

@@ -1,11 +1,12 @@
+import "./item-cards.css";
 
 
-
-export const ManageItemCard = (item) => {
+export const ManageItemCard = ({ item }) => {
+    console.log(item);
     return (
-        <div id={item.id}>
-            <p>{item.name}</p>
-            <button>{`>`}</button>
+        <div id={item.idItem} className="item-card">
+            <p className="item-name">{item.Name}</p>
+            <button className="manage-item-button">{`>`}</button>
         </div>
     )
 }

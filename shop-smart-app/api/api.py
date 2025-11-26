@@ -1,11 +1,17 @@
 import time
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from dbShopSmart import create
+from enum import Enum
 import sqlite3
 
 app = Flask(__name__)
 CORS(app)
 DATABASE = "grocery.db"
+class Status(Enum):
+    Active = 1
+    Checked = 2
+    Inactive = 3
 
 @app.route('/api/time')
 def get_current_time():
@@ -53,11 +59,16 @@ def index():
     # 5. Pass dictionary to the HTML template
     return jsonify(items_by_store)
 
+@app.route('/api/create-db')
+def initialize():
+    create(DATABASE)
+
+    return jsonify({"status" : "success"}), 201
 
 ###############################################################################
 
 @app.route("/api/items", methods=['POST'])
-def add_item():
+def add_items():
 
     data = request.get_json()
     item_name = data.get("name")
@@ -236,6 +247,71 @@ def delte_item(item_id):
     con.close()
 
     return jsonify({"deleted" : item_id}), 200
+
+
+###############################################################################
+
+
+
+# TEMP ROUTES TO COMBINE LATER
+#add an item by name
+@app.route("/api/item", methods=['POST'])
+def add_item():
+
+    data = request.get_json()
+    item_name = data.get("name")
+
+    user_id = 1 #placeholder
+
+    if not item_name:
+        return jsonify({"error": "Missing name or store"}), 400
+
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # check if item exists
+    existing_item = cur.execute("SELECT idItem, Name, Status FROM Item WHERE Name = (?)", (item_name,)).fetchone()
+
+    # create item if new, reactivate if exists
+    if not existing_item:
+        cur.execute("INSERT INTO Item (Name, UserId, Status) VALUES (?, ?, ?)", (item_name, user_id, Status.Active.value))
+    elif existing_item and existing_item["Status"] == Status.Inactive.value:
+        cur.execute("UPDATE Item SET Status = ? WHERE idItem = ?", (Status.Active.value, existing_item["idItem"]))
+    elif existing_item and (existing_item["Status"] == Status.Active.value or existing_item["Status"] == Status.Checked.value):
+        return jsonify({ "status" : "error"}), 500
+
+    con.commit()
+    con.close()
+
+    return jsonify({"status" : "success"}), 201
+
+
+#get all items
+@app.route("/api/all-items", methods=["GET"])
+def get_all_items():
+    con = get_db_connection()
+    items = con.execute("""
+        SELECT Item.idItem, Item.Name, Item.Status, Item.StoreID
+        FROM Item
+        """).fetchall()
+
+    con.close()
+    return jsonify([dict(i) for i in items])
+
+
+
+
+
+
+
+### routes used by front end so far
+# /api/item POST
+# /api/all-items GET
+# /api/stores GET
+
+
+
+
 
 
 ###############################################################################
