@@ -242,7 +242,7 @@ def delte_item(item_id):
     con = get_db_connection()
     cur = con.cursor()
 
-    cur.execute("DELETE From Item WHERE idItem = ?", (item_id))
+    cur.execute("DELETE From Item WHERE idItem = ?", (item_id,))
     con.commit()
     con.close()
 
@@ -276,7 +276,7 @@ def add_item():
     if not existing_item:
         cur.execute("INSERT INTO Item (Name, UserId, Status) VALUES (?, ?, ?)", (item_name, user_id, Status.Active.value))
     elif existing_item and existing_item["Status"] == Status.Inactive.value:
-        cur.execute("UPDATE Item SET Status = ? WHERE idItem = ?", (Status.Active.value, existing_item["idItem"]))
+        cur.execute("UPDATE Item SET Status = ? WHERE idItem = (?)", (Status.Active.value, existing_item["idItem"]))
     elif existing_item and (existing_item["Status"] == Status.Active.value or existing_item["Status"] == Status.Checked.value):
         return jsonify({ "status" : "error"}), 500
 
@@ -300,7 +300,7 @@ def add_store():
     cur = con.cursor()
 
     # check if store exists
-    existing_store = cur.execute("SELECT Name FROM Store WHERE Name = (?)", (store_name,)).fetchone()
+    existing_store = cur.execute("SELECT Name FROM Store WHERE Name = ?", (store_name,)).fetchone()
 
     if existing_store:
         return jsonify({ "error": "store already exists"}), 500
@@ -316,7 +316,8 @@ def add_store():
 @app.route("/api/all-items", methods=["GET"])
 def get_all_items():
     con = get_db_connection()
-    items = con.execute("""
+    cur = con.cursor()
+    items = cur.execute("""
         SELECT Item.idItem, Item.Name, Item.Status, Item.StoreID
         FROM Item
         """).fetchall()
@@ -325,7 +326,22 @@ def get_all_items():
     return jsonify([dict(i) for i in items])
 
 
+@app.route("/api/update-item", methods=["PATCH"])
+def update_item():
+    data = request.get_json()
+    item_id = data["id"]
+    item_store_id = data["storeId"]
+    item_status = data["status"]
 
+    con = get_db_connection()
+    cur = con.cursor()
+
+    cur.execute("UPDATE Item SET StoreID = ?, Status = ? WHERE idItem = ?", (item_store_id, item_status, item_id))
+
+    con.commit()
+    con.close()
+    return jsonify({"status": "success"}), 201
+    
 
 
 
@@ -334,6 +350,9 @@ def get_all_items():
 # /api/item POST
 # /api/all-items GET
 # /api/stores GET
+# /api/store POST
+# /api/items/id DELETE 
+# /api/update-item UPDATE
 
 
 
