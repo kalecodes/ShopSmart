@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import "./item-action-menu.css";
 import { useDeleteItem } from "../../api-hooks/post/use-delete-item";
 import { useUpdateItem } from "../../api-hooks/patch/use-update-item";
+import { Status } from "../../utils/types";
 
 
 export const ActionMenu = forwardRef(
@@ -25,9 +26,18 @@ export const ActionMenu = forwardRef(
         }
 
         async function handleAssign(item, store_id) {
-            console.log(item.idItem, item.Status, store_id);
             try {
-                await updateItem(item.idItem, item.Status, store_id);
+                await updateItem(item.idItem, store_id, item.Status);
+                await refetchItems();
+                onClose();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function handleComplete(item) {
+            try {
+                await updateItem(item.idItem, item.StoreID, Status.Inactive);
                 await refetchItems();
                 onClose();
             } catch (e) {
@@ -45,7 +55,7 @@ export const ActionMenu = forwardRef(
                 {stores.map((s) => {
                      return (<button key={`move-to-${s.idStore}-button`} className="action" onClick={() => handleAssign(item, s.idStore)}>Assign to {s.Name}</button>)
                 })}
-                <button className="action" onClick={() => console.log("remove")}>Mark Commplete</button>
+                <button className="action" onClick={() => handleComplete(item)}>Mark Complete</button>
                 <button className="action" onClick={() => handleDelete(item.idItem)}>Delete Permanently</button>
             </div>
         )

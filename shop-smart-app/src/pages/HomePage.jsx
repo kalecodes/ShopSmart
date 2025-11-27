@@ -8,6 +8,7 @@ import { StoreCard } from "../components/store-cards/store-card";
 import { ManageItemCard } from "../components/item-cards/manage-item-card";
 import { ActionMenu } from "../components/modals/item-action-menu";
 import { Modal } from '../components/modals/base-modal';
+import { Status } from "../utils/types";
 
 export default function HomePage() {
   const [storeModalOpen, setStoreModalOpen] = useState(false);
@@ -71,7 +72,7 @@ export default function HomePage() {
   const { unassignedItemCards, storeCards } = useMemo(() => {
     console.log({ items: items_data, stores: stores_data });
     if (!items_data) return { unassignedItemCards: [], storeCards: [] };
-    const unassignedItems = items_data.filter(x => x.StoreID === null);
+    const unassignedItems = items_data.filter(x => x.StoreID === null && x.Status !== Status.Inactive);
     const unassCards = unassignedItems.map(u =>
       <ManageItemCard key={u.idItem} item={u} onOpenMenu={openActionMenu} />
     );
@@ -79,7 +80,7 @@ export default function HomePage() {
     if (!stores_data) return { unassignedItemCards: unassCards, storeCards: [] }
     
     const storeCards = stores_data.map(s => {
-      const storeItems = items_data.filter(x => x.StoreID === s.idStore).map(i => <ManageItemCard key={i.idItem} item={i} onOpenMenu={openActionMenu} />);
+      const storeItems = items_data.filter(x => x.StoreID === s.idStore && x.Status !== Status.Inactive).map(i => <ManageItemCard key={i.idItem} item={i} onOpenMenu={openActionMenu} />);
       return <StoreCard store={s} itemCards={storeItems} />
     });
 
