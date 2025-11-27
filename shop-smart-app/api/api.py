@@ -264,7 +264,7 @@ def add_item():
     user_id = 1 #placeholder
 
     if not item_name:
-        return jsonify({"error": "Missing name or store"}), 400
+        return jsonify({"error": "Missing item name"}), 400
 
     con = get_db_connection()
     cur = con.cursor()
@@ -285,6 +285,32 @@ def add_item():
 
     return jsonify({"status" : "success"}), 201
 
+@app.route("/api/store", methods=['POST'])
+def add_store():
+
+    data = request.get_json()
+    store_name = data.get("name")
+
+    user_id = 1
+
+    if not store_name:
+        return jsonify({"error": "Missing store name"}), 400
+    
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # check if store exists
+    existing_store = cur.execute("SELECT Name FROM Store WHERE Name = (?)", (store_name,)).fetchone()
+
+    if existing_store:
+        return jsonify({ "error": "store already exists"}), 500
+    
+    cur.execute("INSERT INTO Store (Name, UserId) VALUES (?, ?)", (store_name, user_id))
+
+    con.commit()
+    con.close()
+
+    return jsonify({"status": "success"}), 201
 
 #get all items
 @app.route("/api/all-items", methods=["GET"])

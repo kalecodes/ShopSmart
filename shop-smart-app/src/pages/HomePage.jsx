@@ -1,20 +1,35 @@
+import { useEffect, useMemo, useState } from "react";
 import "./HomePage.css";
 import { useGetItems } from "../api-hooks/get/use-get-items";
 import { useGetStores } from "../api-hooks/get/use-get-stores";
+import { useAddStore } from "../api-hooks/post/use-add-store";
 import { UnassignedCard } from "../components/store-cards/unassigned-card";
 import { StoreCard } from "../components/store-cards/store-card";
 import { ManageItemCard } from "../components/item-cards/manage-item-card";
-import { useEffect, useMemo } from "react";
+import { Modal } from '../components/modals/base-modal';
 
 export default function HomePage() {
+  const [storeModalOpen, setStoreModalOpen] = useState(false);
+  const [storeName, setStoreName] = useState("");
   const { data: items_data, loading: itemsLoading, error: itemsError, refetch: refetchItems } = useGetItems();
   const { data: stores_data, loading: storesLoading, error: storesError, refetch: refetchStores } = useGetStores();
+  const { addStore, loading, error } = useAddStore();
 
-  useEffect(() => {
-    console.log({ items: items_data, stores: stores_data });
-  }, [items_data, stores_data]);
+  async function handleAddStore() {
+    if (!storeName.trim()) return;
+
+    try {
+      await addStore(storeName);
+      setStoreName("");
+      refetchStores();
+      setStoreModalOpen(false);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   const { unassignedItemCards, storeCards } = useMemo(() => {
+    console.log({ items: items_data, stores: stores_data });
     if (!items_data) return { unassignedItemCards: [], storeCards: [] };
     const unassignedItems = items_data.filter(x => x.StoreID === null);
     const unassCards = unassignedItems.map(u =>
@@ -40,7 +55,21 @@ export default function HomePage() {
         {storeCards}
         
       </div>
-      <button className="new-store-button">{`+`}</button>
+      <button onClick={() => setStoreModalOpen(true)}className="new-store-button">{`+`}</button>
+      <Modal open={storeModalOpen} onClose={() => setStoreModalOpen(false)}>
+        <h2>Add a New Store</h2>
+        <div className="new-store-form">
+          <input 
+            type="text" 
+            id="store-input" 
+            className="store-name-input" 
+            placeholder="Add an Store.."
+            value={storeName}
+            onChange={(e) => setStoreName(e.target.value)}
+          />
+          <button onClick={() => handleAddStore()}>Add</button>
+        </div>
+      </Modal>
     </div>
   );
 }

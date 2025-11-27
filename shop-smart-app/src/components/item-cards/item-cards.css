@@ -1,18 +1,20 @@
 .item-card {
     margin-bottom: 5px;
-    padding: 5px 10px 5px 10px;
+    padding: 5px 20px 5px 20px;
     border: 1px solid black;
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-grow: 1;
-    width: 100%;
+    /* width: 100%; */
 }
 
 .item-name {
-    margin-top: auto;
-    margin-bottom: auto;
+    /* margin-top: auto; */
+    /* margin-bottom: auto; */
+    /* padding: 0; */
+
 }
 
 .manage-item-button {
