@@ -1,0 +1,13 @@
+.add-item {
+    margin-top: 10px;
+    padding: 10px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.item-name-input {
+    width: 100%;
+    padding: 10px;
+}

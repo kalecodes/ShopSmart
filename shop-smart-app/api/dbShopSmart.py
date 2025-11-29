@@ -40,21 +40,33 @@ def create(db_filename):
 			Name TEXT NOT NULL,
 			UserID INT,
 			StoreID INT,
+            Status INT,
 
 			FOREIGN KEY(UserID) REFERENCES User(idUser),
 			FOREIGN KEY(StoreID) REFERENCES Store(idStore)
 		)
 	''')
+      
 	cur.execute('''
 		CREATE TABLE IF NOT EXISTS Trip (
 			idTrip INTEGER PRIMARY KEY AUTOINCREMENT,
 			UserID INT NOT NULL,
-			StoreID INT NOT NULL,
-			Status TEXT,
-			
-			FOREIGN KEY(UserID) REFERENCES User(idUser),
-			FOREIGN KEY(StoreID) REFERENCES Store(idStore)
-			
+			Status INT,
+             
+            FOREIGN KEY(UserID) REFERENCES User(idUser)
+		)
+	''')
+      
+	cur.execute('''
+		CREATE TABLE IF NOT EXISTS TripItem (
+			idTripItem INTEGER PRIMARY KEY AUTOINCREMENT,
+            TripID INT NOT NULL,
+            ItemID INT NOT NULL,
+             
+            FOREIGN KEY(TripID) REFERENCES Trip(idTrip),
+            FOREIGN KEY(ItemID) REFERENCES Item(idItem),
+             
+            UNIQUE(TripID, ItemID)
 		)
 	''')
 	
