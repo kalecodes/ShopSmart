@@ -3,19 +3,29 @@ import { useGetActiveTrip } from "../api-hooks/get/use-get-active-trip";
 import { useGetItems } from "../api-hooks/get/use-get-items";
 import { useGetStores } from "../api-hooks/get/use-get-stores";
 import "./ShoppingPage.css";
-import { ItemStatus } from "../utils/types";
+import { ItemStatus, TripStatus } from "../utils/types";
 import { TripPickerCard } from "../components/trip-components/trip-picker-card";
+import { useGetTripItems } from "../api-hooks/get/use-get-trip-items";
+import { UnassignedCard } from "../components/store-cards/unassigned-card";
+import { ManageItemCard } from "../components/item-cards/manage-item-card";
+import { StoreCard } from "../components/store-cards/store-card";
+import { ShopItemCard } from "../components/item-cards/shop-item-card";
+import { useCompleteTrip } from "../api-hooks/patch/use-complete-trip";
 
 export default function ShoppingPage() {
+  const [activeTripId, setActiveTripId] = useState(null);
   const { data, loading, error, refetch } = useGetActiveTrip();
   const { data: items_data, loading: itemsLoading, error: itemsError, refetch: refetchItems } = useGetItems();
   const { data: stores_data, loading: storesLoading, error: storesError, refetch: refetchStores } = useGetStores();
-  const [activeTrip, setActiveTrip] = useState(false);
+  const { data: trip_items_data } = useGetTripItems(activeTripId);
+  const { completeTrip } = useCompleteTrip();
 
   useEffect(() => {
     console.log(data);
-    if (!data || data.active === false) {
-      setActiveTrip(false);
+    if (data && data.Status === TripStatus.Active && data.idTrip) {
+      setActiveTripId(data.idTrip);
+    } else {
+      setActiveTripId(null)
     }
   }, [data]);
 
@@ -29,9 +39,18 @@ export default function ShoppingPage() {
     }
   }
 
+  async function endTrip() {
+    try {
+      await completeTrip(activeTripId);
+      await refetchShoppingDetails();
+    } catch (e) { 
+      console.error(e);
+    }
+  }
+
   const tripOptions = useMemo(() => {
     const options = [];
-    if (activeTrip) return options;
+    if (activeTripId) return options;
     if (!items_data) return options;
 
     if (stores_data && stores_data.length > 0) {
@@ -53,31 +72,43 @@ export default function ShoppingPage() {
     };
 
     return options;
-  }, [activeTrip, JSON.stringify(items_data), JSON.stringify(stores_data)])
+  }, [activeTripId, JSON.stringify(items_data), JSON.stringify(stores_data)]);
 
-// const { unassignedItemCards, storeCards } = useMemo(() => {
-//     console.log({ items: items_data, stores: stores_data });
-//     if (!items_data) return { unassignedItemCards: [], storeCards: [] };
-//     const unassignedItems = items_data.filter(x => x.StoreID === null && x.Status !== ItemStatus.Inactive);
-//     const unassCards = unassignedItems.map(u =>
-//       <ManageItemCard key={u.idItem} item={u} onOpenMenu={openActionMenu} />
-//     );
+  const tripItems = useMemo(() => {
+    if (!trip_items_data || !items_data) return [];
+    return items_data.filter(x => trip_items_data.item_ids.includes(x.idItem) && x.Status !== ItemStatus.Inactive);
+  }, [JSON.stringify(trip_items_data), JSON.stringify(items_data)]);
 
-//     if (!stores_data) return { unassignedItemCards: unassCards, storeCards: [] }
+  const shopCards = useMemo(() => {
+    console.log({ items: items_data, stores: stores_data });
+    const cards = [];
+    if (!items_data || !tripItems.length) return cards;
+
+    const unassignedItems = tripItems.filter(x => x.StoreID === null);
+    const unassCards = unassignedItems.map(u =>
+      <ShopItemCard key={u.idItem} item={u} refetchItems={refetchItems} />
+    );
+
+    if (unassignedItems.length > 0) {
+      cards.push(<UnassignedCard itemCards={unassCards} refetchItems={refetchItems} isShop={true}/>)
+    }
+
+    if (!stores_data) return shopCards;
     
-//     const storeCards = stores_data.sort((s1, s2) => s1.Name.localeCompare(s2.Name)).map(s => {
-//       const storeItems = items_data.filter(x => x.StoreID === s.idStore && x.Status !== ItemStatus.Inactive).map(i => <ManageItemCard key={i.idItem} item={i} onOpenMenu={openActionMenu} />);
-//       return <StoreCard store={s} itemCards={storeItems} />
-//     });
+    const storeCards = stores_data.sort((s1, s2) => s1.Name.localeCompare(s2.Name)).map(s => {
+      const storeItems = tripItems.filter(x => x.StoreID === s.idStore).map(i => <ShopItemCard key={i.idItem} item={i} refetchItems={refetchItems} />);
+      if (storeItems.length > 0) {
+        return <StoreCard store={s} itemCards={storeItems} />
+      }
+    });
 
-//     return { unassignedItemCards: unassCards, storeCards: storeCards }
-//   }, [JSON.stringify(items_data), JSON.stringify(stores_data)]);
+    cards.push(storeCards);
+
+    return cards;
+  }, [tripItems, JSON.stringify(items_data), JSON.stringify(stores_data)]);
 
 
-
-
-
-  if (!activeTrip) return (
+  if (!activeTripId) return (
     <div className="new-trip-page">
       <div className="new-trip-form">
         {tripOptions.length > 0
@@ -92,10 +123,15 @@ export default function ShoppingPage() {
 
   return (
     <div className="shopping-page">
-      <h1 className="shopping-title">Your Shopping Lists</h1>
-      <p className="shopping-text">
-        Track, update, and organize your shopping items by store.
-      </p>
+      {/* <div className="shop-cards"> */}
+        {shopCards}
+        <button
+          className="end-trip-button"
+          onClick={endTrip}
+        >
+          Complete Trip
+        </button>
+      {/* </div> */}
     </div>
   );
 }

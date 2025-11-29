@@ -309,6 +309,7 @@ def add_store():
     if existing_store:
         return jsonify({ "error": "store already exists"}), 500
     
+    # create store if it does not exist
     cur.execute("INSERT INTO Store (Name, UserId) VALUES (?, ?)", (store_name, user_id))
 
     con.commit()
@@ -340,6 +341,7 @@ def update_item():
     con = get_db_connection()
     cur = con.cursor()
 
+    # update item with body parameters
     cur.execute("UPDATE Item SET StoreID = ?, Status = ? WHERE idItem = ?", (item_store_id, item_status, item_id))
 
     con.commit()
@@ -358,6 +360,7 @@ def add_trip():
     con = get_db_connection()
     cur = con.cursor()
 
+    # create the new trip
     cur.execute("""
         INSERT INTO Trip (UserID, Status)
         VALUES (?, ?)
@@ -366,6 +369,7 @@ def add_trip():
     con.commit()
     new_trip_id = cur.lastrowid
 
+    # associate items with this trip
     trip_item_rows = [(new_trip_id, item_id) for item_id in item_ids]
     cur.executemany("""
         INSERT INTO TripItem (TripID, ItemID)
@@ -376,6 +380,60 @@ def add_trip():
 
     return jsonify({"trip_id" : new_trip_id, "status" : "active"}), 201
 
+@app.route("/api/trips/<int:trip_id>/items", methods=['GET'])
+def get_trip_items(trip_id):
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # get all item Ids associated with a trip
+    cur.execute("""
+        SELECT ItemID
+        FROM TripItem
+        WHERE TripID = ?                    
+    """, (trip_id,))
+
+    rows = cur.fetchall()
+    con.close()
+
+    item_ids = [row[0] for row in rows]
+
+    return jsonify({"trip_id": trip_id, "item_ids": item_ids}), 201
+
+@app.route("/api/trips/<int:trip_id>/complete", methods=['PATCH'])
+def complete_trip(trip_id):
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # get all item Ids in this trip
+    cur.execute("""
+        SELECT ItemID
+        FROM TripItem
+        WHERE TripID = ?
+    """, (trip_id,))
+
+    rows = cur.fetchall()
+    item_ids = [row[0] for row in rows]
+
+    # update every item that has been "checked" to status "inactive"
+    cur.execute(f"""
+        UPDATE Item
+        SET Status = 3
+        WHERE idItem IN ({','.join(['?'] * len(item_ids))})
+          AND Status = 2
+    """, item_ids)
+
+    # update trip status to Complete
+    cur.execute("""
+        UPDATE Trip
+        SET Status = 2
+        WHERE idTrip = ?
+    """, (trip_id,))
+
+    con.commit()
+    con.close()
+
+    return jsonify({"trip_id": trip_id, "status": "complete"}), 201
+
 ### routes used by front end so far
 # /api/item POST
 # /api/all-items GET
@@ -385,7 +443,8 @@ def add_trip():
 # /api/update-item UPDATE
 # /api/trips/active GET
 # /api/trips/new POST
-
+# api/trips/<int:trip_id>/items GET
+# "/api/trips/<int:trip_id>/complete" PATCH
 
 
 

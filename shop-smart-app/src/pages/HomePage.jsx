@@ -90,13 +90,13 @@ export default function HomePage() {
   return (
     <div className="home-page">
       <div className="main-column">
-        <UnassignedCard itemCards={unassignedItemCards} refetchItems={refetchItems} />
+        <UnassignedCard itemCards={unassignedItemCards} refetchItems={refetchItems} isShop={false}/>
       </div>
       <div className="store-cards">
         {storeCards}
         
       </div>
-      <button onClick={() => setStoreModalOpen(true)}className="new-store-button">{`+`}</button>
+      <button onClick={() => setStoreModalOpen(true)} className="new-store-button">{`+`}</button>
       <ActionMenu 
         ref={menuRef}
         open={menuState.open}
