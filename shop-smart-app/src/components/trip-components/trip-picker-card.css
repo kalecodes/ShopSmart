@@ -1,0 +1,20 @@
+.trip-picker-card {
+    margin-bottom: 5px;
+    padding: 5px 20px 5px 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+    /* width: 100%; */
+}
+
+.trip-picker-label {
+    
+}
+
+.select-trip-button {
+    width: 30px;
+    height: 30px;
+}

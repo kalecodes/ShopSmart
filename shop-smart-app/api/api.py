@@ -8,10 +8,15 @@ import sqlite3
 app = Flask(__name__)
 CORS(app)
 DATABASE = "grocery.db"
-class Status(Enum):
+
+class ItemStatus(Enum):
     Active = 1
     Checked = 2
     Inactive = 3
+
+class TripStatus(Enum):
+    Active = 1
+    Complete = 2
 
 @app.route('/api/time')
 def get_current_time():
@@ -157,9 +162,9 @@ def start_trip():
     cur = con.cursor()
 
     cur.execute("""
-        INSET INTO Trip (UserID, StoreID, Stats)
+        INSERT INTO Trip (UserID, StoreID, Stats)
         VALUES (?, ?, ?)
-        """, (user_id, store_id, "active"))
+        """, (user_id, store_id, TripStatus.Active))
 
     con.commit()
     new_trip_id = cur.lastrowid
@@ -178,11 +183,10 @@ def get_active_trip():
     con = get_db_connection()
 
     row = con.execute("""
-        SELECT Trip.idTrip, Trip.Status, Store.Name AS store_name
+        SELECT Trip.idTrip, Trip.Status
         FROM Trip
-        JOIN Store ON Trip.StoreID = Store.idStore
-        WHERE Trip.UserID = ? AND Trip.Status = "active"
-        LIMIT 1 # one trip per store
+        WHERE Trip.UserID = ? AND Trip.Status = 1
+        LIMIT 1
         """, (user_id,)).fetchone()
 
     con.close()
@@ -274,10 +278,10 @@ def add_item():
 
     # create item if new, reactivate if exists
     if not existing_item:
-        cur.execute("INSERT INTO Item (Name, UserId, Status) VALUES (?, ?, ?)", (item_name, user_id, Status.Active.value))
-    elif existing_item and existing_item["Status"] == Status.Inactive.value:
-        cur.execute("UPDATE Item SET Status = ? WHERE idItem = (?)", (Status.Active.value, existing_item["idItem"]))
-    elif existing_item and (existing_item["Status"] == Status.Active.value or existing_item["Status"] == Status.Checked.value):
+        cur.execute("INSERT INTO Item (Name, UserId, Status) VALUES (?, ?, ?)", (item_name, user_id, ItemStatus.Active.value))
+    elif existing_item and existing_item["Status"] == ItemStatus.Inactive.value:
+        cur.execute("UPDATE Item SET Status = ? WHERE idItem = (?)", (ItemStatus.Active.value, existing_item["idItem"]))
+    elif existing_item and (existing_item["Status"] == ItemStatus.Active.value or existing_item["Status"] == ItemStatus.Checked.value):
         return jsonify({ "status" : "error"}), 500
 
     con.commit()
@@ -341,10 +345,36 @@ def update_item():
     con.commit()
     con.close()
     return jsonify({"status": "success"}), 201
-    
 
+@app.route("/api/trips/new", methods=["POST"])
+def add_trip():
+    data = request.get_json()
+    user_id = data.get("user_id", 1) # placeholder
+    item_ids = data.get("item_ids")
 
+    if not item_ids:
+        return jsonify({"error" : "Missing Item Ids"}), 400
 
+    con = get_db_connection()
+    cur = con.cursor()
+
+    cur.execute("""
+        INSERT INTO Trip (UserID, Status)
+        VALUES (?, ?)
+        """, (user_id, TripStatus.Active.value))
+
+    con.commit()
+    new_trip_id = cur.lastrowid
+
+    trip_item_rows = [(new_trip_id, item_id) for item_id in item_ids]
+    cur.executemany("""
+        INSERT INTO TripItem (TripID, ItemID)
+        VALUES (?, ?)     
+    """, trip_item_rows)
+    con.commit()
+    con.close()
+
+    return jsonify({"trip_id" : new_trip_id, "status" : "active"}), 201
 
 ### routes used by front end so far
 # /api/item POST
@@ -353,6 +383,8 @@ def update_item():
 # /api/store POST
 # /api/items/id DELETE 
 # /api/update-item UPDATE
+# /api/trips/active GET
+# /api/trips/new POST
 
 
 

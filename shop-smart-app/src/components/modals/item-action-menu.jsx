@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import "./item-action-menu.css";
 import { useDeleteItem } from "../../api-hooks/post/use-delete-item";
 import { useUpdateItem } from "../../api-hooks/patch/use-update-item";
-import { Status } from "../../utils/types";
+import { ItemStatus } from "../../utils/types";
 
 
 export const ActionMenu = forwardRef(
@@ -37,7 +37,7 @@ export const ActionMenu = forwardRef(
 
         async function handleComplete(item) {
             try {
-                await updateItem(item.idItem, item.StoreID, Status.Inactive);
+                await updateItem(item.idItem, item.StoreID, ItemStatus.Inactive);
                 await refetchItems();
                 onClose();
             } catch (e) {
