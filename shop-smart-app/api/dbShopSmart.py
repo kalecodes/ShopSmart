@@ -17,7 +17,7 @@ def create(db_filename):
 	cur.execute('''
 		CREATE TABLE IF NOT EXISTS User (
 			idUser INTEGER PRIMARY KEY AUTOINCREMENT,
-			Name TEXT NOT NULL,
+			Email TEXT NOT NULL,
 			Username TEXT UNIQUE,
 			Password TEXT
 		)
@@ -88,12 +88,12 @@ def create_test_data(db_filename):
 
 	### Inserting Users ###
 
-	cur.execute("INSERT INTO User (Name, Username, Password) VALUES (?, ?, ?)", 
-	("Test User 1", "username1", "password1234"))
+	cur.execute("INSERT INTO User (Email, Username, Password) VALUES (?, ?, ?)", 
+	("username1@gmail.com", "username1", "password1234"))
 		
 	user1_id = cur.lastrowid
 
-	cur.execute("INSERT INTO User (Name, Username, Password) VALUES (?, ?, ?)", ("Test User 2", "username2", "password1234"))
+	cur.execute("INSERT INTO User (Email, Username, Password) VALUES (?, ?, ?)", ("username2@gmail.com", "username2", "password1234"))
 		
 	user2_id = cur.lastrowid
 

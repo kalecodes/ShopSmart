@@ -26,8 +26,8 @@ export default function LandingPage() {
   return (
     <div className="landing-page">
       <Lottie animationData={welcomeLottie} loop={false} className="welcomeLottie"></Lottie>
-      <p>The current time is {time === null ? 'Unreachable' : new Date(time * 1000).toLocaleString()}</p>
-      <button onClick={createDb}>Create DB</button>
+      {/* <p>The current time is {time === null ? 'Unreachable' : new Date(time * 1000).toLocaleString()}</p>
+      <button onClick={createDb}>Create DB</button> */}
       <p className="landing-text">
         Shop Smart - We aim to bring a unique, automated solution to the shopping experience.
         Managing common household item preferences and tracking key retailers has 
@@ -58,7 +58,7 @@ export default function LandingPage() {
           <p className="feature-paragraph">This is where the feature description will be placed for each item.</p>
         </div>
         <div className="learn-div">
-          <a href="/shopping" className="learn-link">Learn More</a>
+          <a href="/shop" className="learn-link">Learn More</a>
         </div>
       </div>
     </div>

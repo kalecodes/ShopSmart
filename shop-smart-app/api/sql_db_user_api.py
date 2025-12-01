@@ -16,6 +16,7 @@ def create_db(db_filename):
 	cur.execute('''
 		CREATE TABLE IF NOT EXISTS User (
 			idUser INTEGER PRIMARY KEY AUTOINCREMENT,
+            Email TEXT,
 			Username TEXT UNIQUE,
 			Password TEXT
 		)
@@ -74,7 +75,7 @@ def print_tables(db_filename):
         
         print ("")
 
-def add_user(db_filename, username, password):
+def add_user(db_filename, email, username, password):
     '''Adds a new user to the data table User.
     Parameters:
         db_filename: The name of the data base.
@@ -86,6 +87,8 @@ def add_user(db_filename, username, password):
     '''
     if(db_filename == None or type(db_filename) != str):
         return False
+    if(email == None or type(email) != str):
+        return False
     if(username == None or type(username) != str):
         return False
     if(password == None or type(password) != str):
@@ -94,7 +97,7 @@ def add_user(db_filename, username, password):
     con = sqlite3.connect(db_filename)
     cur = con.cursor()
     
-    cur.execute("INSERT INTO User (Username, Password) VALUES('%s', '%s');" % (username, password))
+    cur.execute("INSERT INTO User (Email, Username, Password) VALUES('%s', '%s', '%s');" % (email, username, password))
     
     con.commit()
     con.close()
