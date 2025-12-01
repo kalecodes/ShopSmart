@@ -4,10 +4,13 @@ from flask_cors import CORS
 from dbShopSmart import create
 from enum import Enum
 import sqlite3
+from sql_db_user_api import add_user, create_db, verify_user
 
 app = Flask(__name__)
 CORS(app)
 DATABASE = "grocery.db"
+
+create_db(DATABASE)
 
 class ItemStatus(Enum):
     Active = 1
@@ -434,6 +437,48 @@ def complete_trip(trip_id):
 
     return jsonify({"trip_id": trip_id, "status": "complete"}), 201
 
+### user create api ###
+
+@app.post("/api/create_user")
+def create_user():
+    data = request.get_json() or {}
+    print(data)
+    email = data.get("email")
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password or not email:
+        return jsonify({"ok": False, "error": "Missing email or password"}), 400
+
+    try:
+        add_user(DATABASE, email, username, password)
+    except sqlite3.IntegrityError:
+        return jsonify({"ok": False, "error": "Email already exists"}), 400
+
+    return jsonify({"ok": True}), 201
+
+@app.post("/api/login")
+def login_user():
+    data = request.get_json() or {}
+
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password:
+        return jsonify({"ok": False, "error": "Missing username or password"}), 400
+
+    user_id = verify_user(DATABASE, username, password)
+
+    if user_id == -1:
+        return jsonify({"ok": False, "error": "Invalid username or password"}), 401
+
+    # SUCCESS
+    return jsonify({
+        "ok": True,
+        "user_id": user_id,
+        "message": "Login successful"
+    }), 200
+
 ### routes used by front end so far
 # /api/item POST
 # /api/all-items GET
@@ -445,6 +490,8 @@ def complete_trip(trip_id):
 # /api/trips/new POST
 # api/trips/<int:trip_id>/items GET
 # "/api/trips/<int:trip_id>/complete" PATCH
+# /api/create_user
+# /api/login
 
 
 

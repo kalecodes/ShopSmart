@@ -9,14 +9,12 @@ export default function NewAccountPage() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [errors, setErrors] = useState({
     email: "",
-    firstName: "",
-    lastName: "",
+    username: "",
     password: "",
   });
 
@@ -29,25 +27,13 @@ export default function NewAccountPage() {
   const validateForm = () => {
     const newErrors = {
       email: "",
-      firstName: "",
-      lastName: "",
+      username: "",
       password: "",
     };
 
     if (!email || !email.includes("@")) {
       newErrors.email = "Please enter a valid email address (must include '@').";
     }
-
-    const nameRegex = /^[A-Za-z-]+$/;
-
-    if (!firstName || !nameRegex.test(firstName)) {
-      newErrors.firstName = "First name can only contain letters and '-'.";
-    }
-
-    if (!lastName || !nameRegex.test(lastName)) {
-      newErrors.lastName = "Last name can only contain letters and '-'.";
-    }
-
     if (!password || password.length < 7) {
       newErrors.password = "Password must be at least 7 characters long.";
     }
@@ -58,20 +44,34 @@ export default function NewAccountPage() {
     return !hasErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      console.log("Form is valid, submitting:", {
-        email,
-        firstName,
-        lastName,
-        password, // remove password from console later
+    if (!validateForm()) return;
+
+    try {
+      const response = await fetch("/api/create_user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({
+          username,
+          email,
+          password
+        }),
       });
+
+      const data = await response.json();
+
+      if(!response.ok || !data.ok) {
+        alert(data.error || "Account creation failed");
+        return;
+      } else {
+        alert("Account was successfully created, please login.");
+        navigate(`/sign-in`);
+      }
+    } catch (err) {
+      console.error(err);
     }
-    // add this info to db and navigate to sign-in
-    
-    navigate(`/sign-in`);
   };
 
   return (
@@ -88,20 +88,12 @@ export default function NewAccountPage() {
         {errors.email && <p className="error-text">{errors.email}</p>}
         <input
           type="text"
-          placeholder="First Name"
+          placeholder="Username"
           className="form-input"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
-        {errors.firstName && <p className="error-text">{errors.firstName}</p>}
-        <input
-          type="text"
-          placeholder="Last Name"
-          className="form-input"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
-        {errors.lastName && <p className="error-text">{errors.lastName}</p>}
+        {errors.username && <p className="error-text">{errors.username}</p>}
         <input
           type="password"
           placeholder="Password"
