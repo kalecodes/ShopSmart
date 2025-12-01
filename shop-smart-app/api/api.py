@@ -1,11 +1,25 @@
 import time
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from dbShopSmart import create
+from enum import Enum
 import sqlite3
+from sql_db_user_api import add_user, create_db, verify_user
 
 app = Flask(__name__)
 CORS(app)
 DATABASE = "grocery.db"
+
+create_db(DATABASE)
+
+class ItemStatus(Enum):
+    Active = 1
+    Checked = 2
+    Inactive = 3
+
+class TripStatus(Enum):
+    Active = 1
+    Complete = 2
 
 @app.route('/api/time')
 def get_current_time():
@@ -53,11 +67,16 @@ def index():
     # 5. Pass dictionary to the HTML template
     return jsonify(items_by_store)
 
+@app.route('/api/create-db')
+def initialize():
+    create(DATABASE)
+
+    return jsonify({"status" : "success"}), 201
 
 ###############################################################################
 
 @app.route("/api/items", methods=['POST'])
-def add_item():
+def add_items():
 
     data = request.get_json()
     item_name = data.get("name")
@@ -146,9 +165,9 @@ def start_trip():
     cur = con.cursor()
 
     cur.execute("""
-        INSET INTO Trip (UserID, StoreID, Stats)
+        INSERT INTO Trip (UserID, StoreID, Stats)
         VALUES (?, ?, ?)
-        """, (user_id, store_id, "active"))
+        """, (user_id, store_id, TripStatus.Active))
 
     con.commit()
     new_trip_id = cur.lastrowid
@@ -167,11 +186,10 @@ def get_active_trip():
     con = get_db_connection()
 
     row = con.execute("""
-        SELECT Trip.idTrip, Trip.Status, Store.Name AS store_name
+        SELECT Trip.idTrip, Trip.Status
         FROM Trip
-        JOIN Store ON Trip.StoreID = Store.idStore
-        WHERE Trip.UserID = ? AND Trip.Status = "active"
-        LIMIT 1 # one trip per store
+        WHERE Trip.UserID = ? AND Trip.Status = 1
+        LIMIT 1
         """, (user_id,)).fetchone()
 
     con.close()
@@ -231,11 +249,252 @@ def delte_item(item_id):
     con = get_db_connection()
     cur = con.cursor()
 
-    cur.execute("DELETE From Item WHERE idItem = ?", (item_id))
+    cur.execute("DELETE From Item WHERE idItem = ?", (item_id,))
     con.commit()
     con.close()
 
     return jsonify({"deleted" : item_id}), 200
+
+
+###############################################################################
+
+
+
+# TEMP ROUTES TO COMBINE LATER
+#add an item by name
+@app.route("/api/item", methods=['POST'])
+def add_item():
+
+    data = request.get_json()
+    item_name = data.get("name")
+
+    user_id = 1 #placeholder
+
+    if not item_name:
+        return jsonify({"error": "Missing item name"}), 400
+
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # check if item exists
+    existing_item = cur.execute("SELECT idItem, Name, Status FROM Item WHERE Name = (?)", (item_name,)).fetchone()
+
+    # create item if new, reactivate if exists
+    if not existing_item:
+        cur.execute("INSERT INTO Item (Name, UserId, Status) VALUES (?, ?, ?)", (item_name, user_id, ItemStatus.Active.value))
+    elif existing_item and existing_item["Status"] == ItemStatus.Inactive.value:
+        cur.execute("UPDATE Item SET Status = ? WHERE idItem = (?)", (ItemStatus.Active.value, existing_item["idItem"]))
+    elif existing_item and (existing_item["Status"] == ItemStatus.Active.value or existing_item["Status"] == ItemStatus.Checked.value):
+        return jsonify({ "status" : "error"}), 500
+
+    con.commit()
+    con.close()
+
+    return jsonify({"status" : "success"}), 201
+
+@app.route("/api/store", methods=['POST'])
+def add_store():
+
+    data = request.get_json()
+    store_name = data.get("name")
+
+    user_id = 1
+
+    if not store_name:
+        return jsonify({"error": "Missing store name"}), 400
+    
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # check if store exists
+    existing_store = cur.execute("SELECT Name FROM Store WHERE Name = ?", (store_name,)).fetchone()
+
+    if existing_store:
+        return jsonify({ "error": "store already exists"}), 500
+    
+    # create store if it does not exist
+    cur.execute("INSERT INTO Store (Name, UserId) VALUES (?, ?)", (store_name, user_id))
+
+    con.commit()
+    con.close()
+
+    return jsonify({"status": "success"}), 201
+
+#get all items
+@app.route("/api/all-items", methods=["GET"])
+def get_all_items():
+    con = get_db_connection()
+    cur = con.cursor()
+    items = cur.execute("""
+        SELECT Item.idItem, Item.Name, Item.Status, Item.StoreID
+        FROM Item
+        """).fetchall()
+
+    con.close()
+    return jsonify([dict(i) for i in items])
+
+
+@app.route("/api/update-item", methods=["PATCH"])
+def update_item():
+    data = request.get_json()
+    item_id = data["id"]
+    item_store_id = data["storeId"]
+    item_status = data["status"]
+
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # update item with body parameters
+    cur.execute("UPDATE Item SET StoreID = ?, Status = ? WHERE idItem = ?", (item_store_id, item_status, item_id))
+
+    con.commit()
+    con.close()
+    return jsonify({"status": "success"}), 201
+
+@app.route("/api/trips/new", methods=["POST"])
+def add_trip():
+    data = request.get_json()
+    user_id = data.get("user_id", 1) # placeholder
+    item_ids = data.get("item_ids")
+
+    if not item_ids:
+        return jsonify({"error" : "Missing Item Ids"}), 400
+
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # create the new trip
+    cur.execute("""
+        INSERT INTO Trip (UserID, Status)
+        VALUES (?, ?)
+        """, (user_id, TripStatus.Active.value))
+
+    con.commit()
+    new_trip_id = cur.lastrowid
+
+    # associate items with this trip
+    trip_item_rows = [(new_trip_id, item_id) for item_id in item_ids]
+    cur.executemany("""
+        INSERT INTO TripItem (TripID, ItemID)
+        VALUES (?, ?)     
+    """, trip_item_rows)
+    con.commit()
+    con.close()
+
+    return jsonify({"trip_id" : new_trip_id, "status" : "active"}), 201
+
+@app.route("/api/trips/<int:trip_id>/items", methods=['GET'])
+def get_trip_items(trip_id):
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # get all item Ids associated with a trip
+    cur.execute("""
+        SELECT ItemID
+        FROM TripItem
+        WHERE TripID = ?                    
+    """, (trip_id,))
+
+    rows = cur.fetchall()
+    con.close()
+
+    item_ids = [row[0] for row in rows]
+
+    return jsonify({"trip_id": trip_id, "item_ids": item_ids}), 201
+
+@app.route("/api/trips/<int:trip_id>/complete", methods=['PATCH'])
+def complete_trip(trip_id):
+    con = get_db_connection()
+    cur = con.cursor()
+
+    # get all item Ids in this trip
+    cur.execute("""
+        SELECT ItemID
+        FROM TripItem
+        WHERE TripID = ?
+    """, (trip_id,))
+
+    rows = cur.fetchall()
+    item_ids = [row[0] for row in rows]
+
+    # update every item that has been "checked" to status "inactive"
+    cur.execute(f"""
+        UPDATE Item
+        SET Status = 3
+        WHERE idItem IN ({','.join(['?'] * len(item_ids))})
+          AND Status = 2
+    """, item_ids)
+
+    # update trip status to Complete
+    cur.execute("""
+        UPDATE Trip
+        SET Status = 2
+        WHERE idTrip = ?
+    """, (trip_id,))
+
+    con.commit()
+    con.close()
+
+    return jsonify({"trip_id": trip_id, "status": "complete"}), 201
+
+### user create api ###
+
+@app.post("/api/create_user")
+def create_user():
+    data = request.get_json() or {}
+    print(data)
+    email = data.get("email")
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password or not email:
+        return jsonify({"ok": False, "error": "Missing email or password"}), 400
+
+    try:
+        add_user(DATABASE, email, username, password)
+    except sqlite3.IntegrityError:
+        return jsonify({"ok": False, "error": "Email already exists"}), 400
+
+    return jsonify({"ok": True}), 201
+
+@app.post("/api/login")
+def login_user():
+    data = request.get_json() or {}
+
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password:
+        return jsonify({"ok": False, "error": "Missing username or password"}), 400
+
+    user_id = verify_user(DATABASE, username, password)
+
+    if user_id == -1:
+        return jsonify({"ok": False, "error": "Invalid username or password"}), 401
+
+    # SUCCESS
+    return jsonify({
+        "ok": True,
+        "user_id": user_id,
+        "message": "Login successful"
+    }), 200
+
+### routes used by front end so far
+# /api/item POST
+# /api/all-items GET
+# /api/stores GET
+# /api/store POST
+# /api/items/id DELETE 
+# /api/update-item UPDATE
+# /api/trips/active GET
+# /api/trips/new POST
+# api/trips/<int:trip_id>/items GET
+# "/api/trips/<int:trip_id>/complete" PATCH
+# /api/create_user
+# /api/login
+
+
+
 
 
 ###############################################################################

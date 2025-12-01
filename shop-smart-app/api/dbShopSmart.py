@@ -17,7 +17,7 @@ def create(db_filename):
 	cur.execute('''
 		CREATE TABLE IF NOT EXISTS User (
 			idUser INTEGER PRIMARY KEY AUTOINCREMENT,
-			Name TEXT NOT NULL,
+			Email TEXT NOT NULL,
 			Username TEXT UNIQUE,
 			Password TEXT
 		)
@@ -40,21 +40,33 @@ def create(db_filename):
 			Name TEXT NOT NULL,
 			UserID INT,
 			StoreID INT,
+            Status INT,
 
 			FOREIGN KEY(UserID) REFERENCES User(idUser),
 			FOREIGN KEY(StoreID) REFERENCES Store(idStore)
 		)
 	''')
+      
 	cur.execute('''
 		CREATE TABLE IF NOT EXISTS Trip (
 			idTrip INTEGER PRIMARY KEY AUTOINCREMENT,
 			UserID INT NOT NULL,
-			StoreID INT NOT NULL,
-			Status TEXT,
-			
-			FOREIGN KEY(UserID) REFERENCES User(idUser),
-			FOREIGN KEY(StoreID) REFERENCES Store(idStore)
-			
+			Status INT,
+             
+            FOREIGN KEY(UserID) REFERENCES User(idUser)
+		)
+	''')
+      
+	cur.execute('''
+		CREATE TABLE IF NOT EXISTS TripItem (
+			idTripItem INTEGER PRIMARY KEY AUTOINCREMENT,
+            TripID INT NOT NULL,
+            ItemID INT NOT NULL,
+             
+            FOREIGN KEY(TripID) REFERENCES Trip(idTrip),
+            FOREIGN KEY(ItemID) REFERENCES Item(idItem),
+             
+            UNIQUE(TripID, ItemID)
 		)
 	''')
 	
@@ -76,12 +88,12 @@ def create_test_data(db_filename):
 
 	### Inserting Users ###
 
-	cur.execute("INSERT INTO User (Name, Username, Password) VALUES (?, ?, ?)", 
-	("Test User 1", "username1", "password1234"))
+	cur.execute("INSERT INTO User (Email, Username, Password) VALUES (?, ?, ?)", 
+	("username1@gmail.com", "username1", "password1234"))
 		
 	user1_id = cur.lastrowid
 
-	cur.execute("INSERT INTO User (Name, Username, Password) VALUES (?, ?, ?)", ("Test User 2", "username2", "password1234"))
+	cur.execute("INSERT INTO User (Email, Username, Password) VALUES (?, ?, ?)", ("username2@gmail.com", "username2", "password1234"))
 		
 	user2_id = cur.lastrowid
 

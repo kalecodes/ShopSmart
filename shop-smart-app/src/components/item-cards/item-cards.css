@@ -1,0 +1,27 @@
+.item-card {
+    margin-bottom: 5px;
+    padding: 5px 20px 5px 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+    /* width: 100%; */
+}
+
+.item-name {
+    /* margin-top: auto; */
+    /* margin-bottom: auto; */
+    /* padding: 0; */
+
+}
+
+.manage-item-button {
+    width: 30px;
+    height: 30px;
+}
+
+.check-item-button {
+    
+}
