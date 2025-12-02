@@ -88,6 +88,31 @@ def print_tables(db_filename):
         
         print ("")
 
+def drop_db(db_filename):
+    con = sqlite3.connect(db_filename)
+    cur = con.cursor()
+
+    cur.execute('''
+        DROP TABLE IF EXISTS TripItem
+    ''')
+    cur.execute('''
+        DROP TABLE IF EXISTS Trip
+    ''')
+    cur.execute('''
+        DROP TABLE IF EXISTS Item           
+    ''')
+    cur.execute('''
+        DROP TABLE IF EXISTS Store
+    ''')
+    cur.execute('''
+        DROP TABLE IF EXISTS User 
+    ''')
+
+    con.commit()
+    con.close()
+
+
+
 def add_user(db_filename, email, username, password):
     '''Adds a new user to the data table User.
     Parameters:

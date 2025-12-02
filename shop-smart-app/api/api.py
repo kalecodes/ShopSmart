@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from enum import Enum
 import sqlite3
-from sql_db_user_api import add_user, create_db, verify_user
+from sql_db_user_api import add_user, create_db, drop_db, verify_user
 
 app = Flask(__name__)
 CORS(app)
@@ -25,16 +25,32 @@ def get_current_time():
 
 ###############################################################################
 
-# Helper
+# Connection Helper
 
 def get_db_connection():
     con = sqlite3.connect(DATABASE)
     con.row_factory = sqlite3.Row
     return con
 
+
+# DEV HELPERS
+
+@app.route('/api/create-db')
+def initialize():
+    create_db(DATABASE)
+
+    return jsonify({"status" : "success"}), 201
+
+@app.route('/api/drop-db')
+def drop():
+    drop_db(DATABASE)
+
+    return jsonify({ "status" : "success"}), 201
+
+
 ###############################################################################
 
-@app.route('/')
+@app.route('/api')
 def index():
     con = get_db_connection()
 
@@ -65,11 +81,7 @@ def index():
     # 5. Pass dictionary to the HTML template
     return jsonify(items_by_store)
 
-@app.route('/api/create-db')
-def initialize():
-    create_db(DATABASE)
 
-    return jsonify({"status" : "success"}), 201
 
 ###############################################################################
 
