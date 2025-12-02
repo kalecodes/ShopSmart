@@ -2,7 +2,6 @@ import time
 import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from dbShopSmart import create
 from enum import Enum
 import sqlite3
 from sql_db_user_api import add_user, create_db, verify_user
@@ -10,8 +9,6 @@ from sql_db_user_api import add_user, create_db, verify_user
 app = Flask(__name__)
 CORS(app)
 DATABASE = "grocery.db"
-
-create_db(DATABASE)
 
 class ItemStatus(Enum):
     Active = 1
@@ -70,7 +67,7 @@ def index():
 
 @app.route('/api/create-db')
 def initialize():
-    create(DATABASE)
+    create_db(DATABASE)
 
     return jsonify({"status" : "success"}), 201
 
@@ -508,24 +505,9 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if not os.path.exists(DATABASE):
+    print("creating database...")
+    create_db(DATABASE)
 
 
 
