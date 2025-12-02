@@ -7,7 +7,6 @@ import { ItemStatus, TripStatus } from "../utils/types";
 import { TripPickerCard } from "../components/trip-components/trip-picker-card";
 import { useGetTripItems } from "../api-hooks/get/use-get-trip-items";
 import { UnassignedCard } from "../components/store-cards/unassigned-card";
-import { ManageItemCard } from "../components/item-cards/manage-item-card";
 import { StoreCard } from "../components/store-cards/store-card";
 import { ShopItemCard } from "../components/item-cards/shop-item-card";
 import { useCompleteTrip } from "../api-hooks/patch/use-complete-trip";
