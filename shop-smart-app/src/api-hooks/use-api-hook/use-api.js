@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
-export function useApi(baseUrl = "/api") {
+export function useApi(baseUrl = API_URL) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
