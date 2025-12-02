@@ -1,5 +1,6 @@
 import "./AboutPage.css";
-import placeholder from "../assets/placeholder_image.png"
+import img1 from "../assets/img1.jpg";
+import img2 from "../assets/img2.jpg";
 
 export default function AboutPage() {
   return (
@@ -12,12 +13,15 @@ export default function AboutPage() {
         </p>
       </div>
       <div className="about-box-section">
+        <div className="section-picture">
+          <img alt="section-image" src={img2}/>
+        </div>
         <div className="section-description">
           <h1 className="section-title">Make Planning Easy</h1>
           <ul>
-            <li>Home page feature #1</li>
-            <li>Home page feature #2</li>
-            <li>Home page feature #3</li>
+            <li>Search for an Item</li>
+            <li>View Items from Various Shops</li>
+            <li>Add Items to Your Cart</li>
           </ul>
           <p className="section-paragraph">
             The Home Page greets you with an organized snapshot of your shopping needs. 
@@ -25,25 +29,23 @@ export default function AboutPage() {
             Everything is laid out simply so you can start planning your shopping trip right away.
           </p>
         </div>
-        <div className="section-picture">
-          <img alt="section-image" src={placeholder}/>
-        </div>
       </div>
       <div className="about-box-section">
         <div className="section-picture">
-          <img alt="section-image" src={placeholder}/>
+          <img alt="section-image" src={img1}/>
         </div>
         <div className="section-description">
           <h1 className="section-title">Make Shopping A Breeze</h1>
           <ul>
-            <li>Shop page feature #1</li>
-            <li>Shop page feature #2</li>
-            <li>Shop page feature #3</li>
+            <li>Create Your Shopping Checklist</li>
+            <li>Organize Your Trip</li>
+            <li>Check Off Items</li>
           </ul>
           <p className="section-paragraph">
-            The Home Page greets you with an organized snapshot of your shopping needs. 
-            You can quickly view your lists, recently added items, and suggested stores based on your habits. 
-            Everything is laid out simply so you can start planning your shopping trip right away.
+            The shopping page will allow the user to create a "shopping trip". If there is no active trip, the user will be 
+            able to select a specific store's items, all items, or unassigned items. Once a trip is created, the user will have 
+            access to a checklist(s) of items based on their previous selection. User's can check off items as they shop. When done, 
+            users can complete their trip, to remove items from their associated list.
           </p>
         </div>
       </div>
