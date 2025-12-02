@@ -4,6 +4,7 @@ import welcomeLottie from "../assets/welcomeLottieWhite.json";
 import box from "../assets/box.png";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   const [email, setEmail] = useState("");
@@ -46,7 +47,7 @@ export default function LandingPage() {
           <p className="feature-paragraph">This is where the feature description will be placed for each item.</p>
         </div>
         <div className="learn-div">
-          <a href="/about" className="learn-link">Learn More</a>
+          <Link to="/about" className="learn-link">Learn More</Link>
         </div>
       </div>
     </div>
