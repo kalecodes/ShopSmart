@@ -26,3 +26,4 @@ dist-ssr
 # API Files
 api/venv
 api/__pycache__
+api/grocery.db
