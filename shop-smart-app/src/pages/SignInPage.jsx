@@ -33,7 +33,7 @@ export default function SignInPage() {
       // SUCCESS: navigate to shopping page with user ID
       localStorage.setItem("userId", data.user_id);
       localStorage.setItem("username", username);
-      navigate("/shop");
+      navigate("/");
 
 
     } catch (err) {
