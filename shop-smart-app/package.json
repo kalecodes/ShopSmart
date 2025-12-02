@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run api && npm run dev",
     "dev": "vite",
-    "build": "vite build && cp static.json dist/static.json",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "api": "cd api && venv/bin/flask run --no-debugger"
