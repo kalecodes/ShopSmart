@@ -2,8 +2,9 @@ import "./LandingPage.css";
 import Lottie from "lottie-react";
 import welcomeLottie from "../assets/welcomeLottieWhite.json";
 import box from "../assets/box.png";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   const [email, setEmail] = useState("");
@@ -13,21 +14,9 @@ export default function LandingPage() {
     navigate(`/new-account?email=${encodeURIComponent(email)}`);
   }
 
-  const [time, setTime] = useState(null);
-
-  useEffect(() => {
-    fetch('/api/time').then(res => res.json()).then(data => setTime(data.time));
-  }, [])
-
-  function createDb() {
-    fetch('/api/create-db')
-  }
-
   return (
     <div className="landing-page">
       <Lottie animationData={welcomeLottie} loop={false} className="welcomeLottie"></Lottie>
-      {/* <p>The current time is {time === null ? 'Unreachable' : new Date(time * 1000).toLocaleString()}</p>
-      <button onClick={createDb}>Create DB</button> */}
       <p className="landing-text">
         Shop Smart - We aim to bring a unique, automated solution to the shopping experience.
         Managing common household item preferences and tracking key retailers has 
@@ -58,7 +47,7 @@ export default function LandingPage() {
           <p className="feature-paragraph">This is where the feature description will be placed for each item.</p>
         </div>
         <div className="learn-div">
-          <a href="/shop" className="learn-link">Learn More</a>
+          <Link to="/about" className="learn-link">Learn More</Link>
         </div>
       </div>
     </div>

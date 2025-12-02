@@ -16,7 +16,7 @@ def create_db(db_filename):
 	cur.execute('''
 		CREATE TABLE IF NOT EXISTS User (
 			idUser INTEGER PRIMARY KEY AUTOINCREMENT,
-            Email TEXT,
+			Email TEXT NOT NULL,
 			Username TEXT UNIQUE,
 			Password TEXT
 		)
@@ -39,20 +39,33 @@ def create_db(db_filename):
 			Name TEXT NOT NULL,
 			UserID INT,
 			StoreID INT,
+            Status INT,
 
 			FOREIGN KEY(UserID) REFERENCES User(idUser),
 			FOREIGN KEY(StoreID) REFERENCES Store(idStore)
 		)
 	''')
+      
 	cur.execute('''
 		CREATE TABLE IF NOT EXISTS Trip (
 			idTrip INTEGER PRIMARY KEY AUTOINCREMENT,
 			UserID INT NOT NULL,
-			ItemID INT NOT NULL,
-			
-			FOREIGN KEY(UserID) REFERENCES User(idUser),
-			FOREIGN KEY(ItemID) REFERENCES Store(idItem)
-			
+			Status INT,
+             
+            FOREIGN KEY(UserID) REFERENCES User(idUser)
+		)
+	''')
+      
+	cur.execute('''
+		CREATE TABLE IF NOT EXISTS TripItem (
+			idTripItem INTEGER PRIMARY KEY AUTOINCREMENT,
+            TripID INT NOT NULL,
+            ItemID INT NOT NULL,
+             
+            FOREIGN KEY(TripID) REFERENCES Trip(idTrip),
+            FOREIGN KEY(ItemID) REFERENCES Item(idItem),
+             
+            UNIQUE(TripID, ItemID)
 		)
 	''')
 	
@@ -74,6 +87,31 @@ def print_tables(db_filename):
             print ("\t\t", attr)
         
         print ("")
+
+def drop_db(db_filename):
+    con = sqlite3.connect(db_filename)
+    cur = con.cursor()
+
+    cur.execute('''
+        DROP TABLE IF EXISTS TripItem
+    ''')
+    cur.execute('''
+        DROP TABLE IF EXISTS Trip
+    ''')
+    cur.execute('''
+        DROP TABLE IF EXISTS Item           
+    ''')
+    cur.execute('''
+        DROP TABLE IF EXISTS Store
+    ''')
+    cur.execute('''
+        DROP TABLE IF EXISTS User 
+    ''')
+
+    con.commit()
+    con.close()
+
+
 
 def add_user(db_filename, email, username, password):
     '''Adds a new user to the data table User.
