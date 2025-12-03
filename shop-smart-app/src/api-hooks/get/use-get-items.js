@@ -3,9 +3,12 @@ import { useApi } from "../use-api-hook/use-api";
 
 export function useGetItems() {
     const { data, error, loading, request } = useApi();
+    const user_id = localStorage.getItem("userId");
 
+    console.log(user_id)
     const refetch = useCallback(() => {
-        return request("/all-items");
+        if (!user_id) return;
+        return request(`/all-items/${user_id}`);
     }, [request]);
 
     useEffect(() => {

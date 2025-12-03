@@ -16,7 +16,7 @@ export const TripPickerCard = ({ label, items, refetchDash }) => {
     return (
         <div key={label} className="trip-picker-card">
             <p className="trip-picker-label">{label}</p>
-            <p>{items.length} {items.length > 1 ? "Items" : "Item"}</p>
+            <p className="items-count">{items.length} {items.length > 1 ? "Items" : "Item"}</p>
             <button className="select-trip-button" onClick={handleStartTrip}>{`>`}</button>
         </div>
     )

@@ -94,9 +94,14 @@ export default function HomePage() {
       </div>
       <div className="store-cards">
         {storeCards}
-        
       </div>
-      <button onClick={() => setStoreModalOpen(true)} className="new-store-button">{`+`}</button>
+      <button 
+        title="Click here to add a new store."
+        onClick={() => setStoreModalOpen(true)} 
+        className="new-store-button"
+      >
+          {`+`}
+      </button>
       <ActionMenu 
         ref={menuRef}
         open={menuState.open}
@@ -114,11 +119,11 @@ export default function HomePage() {
             type="text" 
             id="store-input" 
             className="store-name-input" 
-            placeholder="Add an Store.."
+            placeholder="Add a Store.."
             value={storeName}
             onChange={(e) => setStoreName(e.target.value)}
           />
-          <button onClick={handleAddStore}>Add</button>
+          <button className="add-store-button" onClick={handleAddStore}>Add</button>
         </div>
       </Modal>
     </div>
