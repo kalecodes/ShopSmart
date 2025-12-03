@@ -1,6 +1,7 @@
 import "./SignInPage.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function SignInPage() {
   const location = useLocation();
@@ -17,7 +18,7 @@ export default function SignInPage() {
     setErrorMsg("");
 
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

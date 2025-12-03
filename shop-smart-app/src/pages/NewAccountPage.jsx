@@ -2,7 +2,7 @@ import "./NewAccountPage.css";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function NewAccountPage() {
   const location = useLocation();
@@ -50,7 +50,7 @@ export default function NewAccountPage() {
     if (!validateForm()) return;
 
     try {
-      const response = await fetch("/api/create_user", {
+      const response = await fetch(`${API_URL}/create_user`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({
