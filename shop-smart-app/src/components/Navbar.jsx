@@ -24,23 +24,20 @@ export default function Navbar() {
       {isLoggedIn ? (
         <>
           <span className="navbar-user">Hello, {username}</span>
+          <div className="navbar-links">
+              <Link to="/home" className="navbar-link">Home</Link>
+              <Link to="/shop" className="navbar-link">Shop</Link>
+              <button onClick={handleLogout} className="navbar-link logout-btn">
+                Logout
+              </button>
+          </div>
         </>
-      ) : (<></>)}
-
-      <div className="navbar-links">
-        <Link to="/about" className="navbar-link">About</Link>
-
-        {isLoggedIn ? (
-          <>
-            <Link to="/shopping" className="navbar-link">Shop</Link>
-            <button onClick={handleLogout} className="navbar-link logout-btn">
-              Logout
-            </button>
-          </>
-        ) : (
+      ) : (
+        <div className="navbar-links">
+          <Link to="/about" className="navbar-link">About</Link>
           <Link to="/sign-in" className="navbar-link">Sign In</Link>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 }
