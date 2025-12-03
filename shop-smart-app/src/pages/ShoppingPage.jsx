@@ -10,6 +10,7 @@ import { UnassignedCard } from "../components/store-cards/unassigned-card";
 import { StoreCard } from "../components/store-cards/store-card";
 import { ShopItemCard } from "../components/item-cards/shop-item-card";
 import { useCompleteTrip } from "../api-hooks/patch/use-complete-trip";
+import { useNavigate } from "react-router-dom";
 
 export default function ShoppingPage() {
   const [activeTripId, setActiveTripId] = useState(null);
@@ -18,6 +19,7 @@ export default function ShoppingPage() {
   const { data: stores_data, loading: storesLoading, error: storesError, refetch: refetchStores } = useGetStores();
   const { data: trip_items_data } = useGetTripItems(activeTripId);
   const { completeTrip } = useCompleteTrip();
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(data);
@@ -41,7 +43,7 @@ export default function ShoppingPage() {
   async function endTrip() {
     try {
       await completeTrip(activeTripId);
-      await refetchShoppingDetails();
+      navigate("/home")
     } catch (e) { 
       console.error(e);
     }
@@ -62,7 +64,6 @@ export default function ShoppingPage() {
     }
 
     const unassignedItems = items_data.filter(x => x.StoreID === null && x.Status !== ItemStatus.Inactive).map(x => x.idItem);
-    console.log(unassignedItems);
     options.push(<TripPickerCard label="Unassigned" items={unassignedItems} refetchDash={refetchShoppingDetails}/>);
 
     if (stores_data && stores_data.length > 0) {
@@ -79,7 +80,6 @@ export default function ShoppingPage() {
   }, [JSON.stringify(trip_items_data), JSON.stringify(items_data)]);
 
   const shopCards = useMemo(() => {
-    console.log({ items: items_data, stores: stores_data });
     const cards = [];
     if (!items_data || !tripItems.length) return cards;
 
@@ -122,7 +122,6 @@ export default function ShoppingPage() {
 
   return (
     <div className="shopping-page">
-      {/* <div className="shop-cards"> */}
         {shopCards}
         <button
           className="end-trip-button"
@@ -130,7 +129,6 @@ export default function ShoppingPage() {
         >
           Complete Trip
         </button>
-      {/* </div> */}
     </div>
   );
 }

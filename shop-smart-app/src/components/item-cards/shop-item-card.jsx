@@ -15,17 +15,14 @@ export const ShopItemCard = ({ item, refetchItems }) => {
         }
     }
 
-    // TODO: Restyle checkbox
     return (
         <div id={item.idItem} className="item-card"> 
             <p className="item-name">{item.Name}</p>
             <button 
                 className="check-item-button" 
-                style={{ backgroundColor: item.Status === ItemStatus.Checked ? 'lightgreen' : 'lightgrey' }} 
+                style={{ backgroundColor: item.Status === ItemStatus.Checked ? '#3e67d6' : 'white' }} 
                 onClick={toggleItemStatus}
-            >
-                {`O`}
-            </button>
+            />
         </div>
     )
 }
