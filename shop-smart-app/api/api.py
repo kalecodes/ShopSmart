@@ -277,21 +277,24 @@ def add_item():
 
     data = request.get_json()
     item_name = data.get("name")
+    user_id = data.get("user_id")
 
-    user_id = 1 #placeholder
+    print("user", user_id)
 
     if not item_name:
         return jsonify({"error": "Missing item name"}), 400
+    if not user_id:
+        return jsonify({"error": "Missing user id"}), 400
 
     con = get_db_connection()
     cur = con.cursor()
 
     # check if item exists
-    existing_item = cur.execute("SELECT idItem, Name, Status FROM Item WHERE Name = (?)", (item_name,)).fetchone()
+    existing_item = cur.execute("SELECT idItem, Name, Status FROM Item WHERE Name = ? AND UserID = ?", (item_name, user_id)).fetchone()
 
     # create item if new, reactivate if exists
     if not existing_item:
-        cur.execute("INSERT INTO Item (Name, UserId, Status) VALUES (?, ?, ?)", (item_name, user_id, ItemStatus.Active.value))
+        cur.execute("INSERT INTO Item (Name, UserID, Status) VALUES (?, ?, ?)", (item_name, user_id, ItemStatus.Active.value))
     elif existing_item and existing_item["Status"] == ItemStatus.Inactive.value:
         cur.execute("UPDATE Item SET Status = ? WHERE idItem = (?)", (ItemStatus.Active.value, existing_item["idItem"]))
     elif existing_item and (existing_item["Status"] == ItemStatus.Active.value or existing_item["Status"] == ItemStatus.Checked.value):
@@ -331,14 +334,15 @@ def add_store():
     return jsonify({"status": "success"}), 201
 
 #get all items
-@app.route("/api/all-items", methods=["GET"])
-def get_all_items():
+@app.route("/api/all-items/<int:user_id>", methods=["GET"])
+def get_all_items(user_id):
     con = get_db_connection()
     cur = con.cursor()
     items = cur.execute("""
         SELECT Item.idItem, Item.Name, Item.Status, Item.StoreID
         FROM Item
-        """).fetchall()
+        WHERE Item.UserID = ?
+        """, (user_id,)).fetchall()
 
     con.close()
     return jsonify([dict(i) for i in items])
