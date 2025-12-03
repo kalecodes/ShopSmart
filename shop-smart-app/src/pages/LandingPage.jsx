@@ -1,8 +1,10 @@
 import "./LandingPage.css";
 import Lottie from "lottie-react";
 import welcomeLottie from "../assets/welcomeLottieWhite.json";
-import box from "../assets/box.png";
-import { useState } from "react";
+import img3 from "../assets/img3.jpg";
+import img4 from "../assets/img4.jpg";
+import img5 from "../assets/img5.jpg";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -32,19 +34,19 @@ export default function LandingPage() {
         {/* eventually we will need to add a function to pull these information from 
         the database and add them dynamically */}
         <div className="feature-frame">
-          <img src={box} alt="item-image" className="item-image" />
-          <h2 className="feature-title">Feature-1</h2>
-          <p className="feature-paragraph">This is where the feature description will be placed for each item.</p>
+          <img src={img3} alt="item-image" className="item-image" />
+          <h2 className="feature-title">Search for an Item</h2>
+          <p className="feature-paragraph">Search for your favorite items and organize the way you shop.</p>
         </div>
         <div className="feature-frame">
-          <img src={box} alt="item-image" className="item-image" />
-          <h2 className="feature-title">Feature-1</h2>
-          <p className="feature-paragraph">This is where the feature description will be placed for each item.</p>
+          <img src={img4} alt="item-image" className="item-image" />
+          <h2 className="feature-title">Shopping Checklist</h2>
+          <p className="feature-paragraph">Creating your shopping list has never been easier. We want to make sure you get all your items from a single trip.</p>
         </div>
         <div className="feature-frame">
-          <img src={box} alt="item-image" className="item-image" />
-          <h2 className="feature-title">Feature-1</h2>
-          <p className="feature-paragraph">This is where the feature description will be placed for each item.</p>
+          <img src={img5} alt="item-image" className="item-image" />
+          <h2 className="feature-title">Organize Your Trip</h2>
+          <p className="feature-paragraph">Organize your shopping list and your trip. Save time while getting all the items you need.</p>
         </div>
         <div className="learn-div">
           <Link to="/about" className="learn-link">Learn More</Link>

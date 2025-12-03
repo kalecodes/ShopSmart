@@ -31,10 +31,11 @@ export default function SignInPage() {
         return;
       }
 
-      // SUCCESS: navigate to home page
-      navigate("/home", {
-        state: { userId: data.user_id }
-      });
+      // SUCCESS: navigate to shopping page with user ID
+      localStorage.setItem("userId", data.user_id);
+      localStorage.setItem("username", username);
+      navigate("/");
+
 
     } catch (err) {
       console.error(err);
