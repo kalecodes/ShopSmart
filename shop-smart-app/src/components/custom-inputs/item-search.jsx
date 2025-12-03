@@ -28,7 +28,7 @@ export const ItemSearchInput = ({ refetchItems }) => {
                 value={text}
                 onChange={(e) => setText(e.target.value)}
             />
-            <button onClick={() => handleAdd()}>Add</button>
+            <button className="add-item-button" onClick={() => handleAdd()}>Add</button>
         </div>
     )
 }

@@ -25,18 +25,47 @@
   position: absolute;
   bottom: 50px;
   right: 50px;
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
+  color: white;
+  font-size: xx-large;
+  border-radius: 10px;
+  border: 1px solid black;
+  background-color: #3e67d6;
+  transition: background-color 0.1s ease, box-shadow 0.1s ease;
+}
+
+.new-store-button:active {
+  background-color: #2756d9;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .new-store-form {
+  margin-top: 10px;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   border-radius: 10px;
 }
 
+.add-store-button {
+  border-radius: 0px 10px 10px 0px;
+  border: 1px solid black;
+  padding: 20px;
+  font-size: large;
+  color: white;
+  background-color: #3e67d6;
+  transition: background-color 0.1s ease, box-shadow 0.1s ease;
+}
+
+.add-store-button:active {
+  background-color: #2756d9;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
 .store-name-input {
-  /* width: 100%; */
-  padding: 10px;
+  font-size: medium;
+  flex-grow: 1;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 10px 0px 0px 10px;
 }

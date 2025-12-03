@@ -1,5 +1,5 @@
 .action-menu {
-    padding: 5px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     border: 1px solid black;
@@ -9,7 +9,13 @@
 }
 
 .action {
-    border-radius: 10px;
+    border-radius: 5px;
     border: none;
     padding: 5px 10px;
+    transition: background-color 0.1s ease;
+}
+
+.action:active {
+    background-color: gray;
+    color: white;
 }
