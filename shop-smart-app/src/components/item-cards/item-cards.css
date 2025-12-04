@@ -6,12 +6,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 5px;
 }
 
 .item-name {
-    /* margin-top: auto; */
-    /* margin-bottom: auto; */
-    /* padding: 0; */
+    max-width: 250px;
+    text-wrap: wrap;
 }
 
 .manage-item-button {
