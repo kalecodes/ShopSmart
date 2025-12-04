@@ -70,7 +70,6 @@ export default function HomePage() {
   }, [JSON.stringify(stores_data)]);
 
   const { unassignedItemCards, storeCards } = useMemo(() => {
-    console.log({ items: items_data, stores: stores_data });
     if (!items_data) return { unassignedItemCards: [], storeCards: [] };
     const unassignedItems = items_data.filter(x => x.StoreID === null && x.Status !== ItemStatus.Inactive);
     const unassCards = unassignedItems.map(u =>

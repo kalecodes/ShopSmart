@@ -19,7 +19,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-logo">
         <img src={logo} alt="ShopSmart logo" className="logo-image" />
-        <Link to="/" className="navbar-brand">ShopSmart</Link>
+        <Link to={userId ? "/home" : "/"} className="navbar-brand">ShopSmart</Link>
       </div>
       {isLoggedIn ? (
         <>

@@ -31,8 +31,6 @@ export default function LandingPage() {
         </button>
       </div>
       <div className="features-section">
-        {/* eventually we will need to add a function to pull these information from 
-        the database and add them dynamically */}
         <div className="feature-frame">
           <img src={img3} alt="item-image" className="item-image" />
           <h2 className="feature-title">Search for an Item</h2>
