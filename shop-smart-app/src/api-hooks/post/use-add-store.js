@@ -2,11 +2,13 @@ import { useApi } from "../use-api-hook/use-api";
 
 export function useAddStore() {
     const api = useApi();
+    const user_id = localStorage.getItem("userId");
 
     async function addStore(name) {
+        if (!user_id) return;
         return api.request("/store", {
             method: "POST",
-            body: { name },
+            body: { name, user_id },
         });
     };
 
