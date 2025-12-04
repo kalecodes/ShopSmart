@@ -51,7 +51,7 @@ export const ActionMenu = forwardRef(
                 className="action-menu"
                 style={{ position: "absolute", top, left }}
             >
-                {item.storeID === null && <button className="action" onClick={() => handleAssign(item, null)}>Unassign</button>}
+                {item.StoreID !== null && <button className="action" onClick={() => handleAssign(item, null)}>Unassign</button>}
                 {stores.filter(s => s.idStore !== item.StoreID).map((s) => {
                      return (<button key={`move-to-${s.idStore}-button`} className="action" onClick={() => handleAssign(item, s.idStore)}>Assign to {s.Name}</button>)
                 })}
