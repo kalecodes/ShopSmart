@@ -12,24 +12,22 @@
 }
 
 .store-items-wrapper {
-    /* padding: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center; */
-    /* height: auto; */
-    /* min-height: fit-content; */
-    /* height: fit-content; */
     max-height: 30vh;
     overflow: scroll;
 }
 
 .unassigned-card {
     max-height: 80vh;
-    overflow: scroll;
+    overflow: scroll; 
     width: 100%;
     padding: 10px;
     border: 1px solid black;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+}
+
+.unassigned-item-cards {
+    max-height: 100%;
+    overflow: scroll;
 }

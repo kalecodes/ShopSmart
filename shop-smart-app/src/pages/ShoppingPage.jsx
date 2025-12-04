@@ -55,7 +55,9 @@ export default function ShoppingPage() {
 
     if (stores_data && stores_data.length > 0) {
       stores_data.sort((s1, s2) => s1.Name.localeCompare(s2.Name)).forEach(s => {
-        const storeItems = items_data.filter(i => i.StoreID === s.idStore && i.Status !== ItemStatus.Inactive).map(x => x.idItem);
+        const storeItems = items_data
+          .filter(i => i.StoreID === s.idStore && i.Status !== ItemStatus.Inactive)
+          .map(x => x.idItem);
         if (storeItems.length > 0) {
           options.push(<TripPickerCard key={`${s.Name}-trip-card`} label={s.Name} items={storeItems} refetchDash={refetchShoppingDetails}/>)
         }
@@ -83,7 +85,7 @@ export default function ShoppingPage() {
     if (!items_data || !tripItems.length) return { unassignedCard: null, shopCards: null };
 
     const unassignedItems = tripItems.filter(x => x.StoreID === null);
-    const unassCards = unassignedItems.map(u =>
+    const unassCards = unassignedItems.sort((a, b) => a.Name.localeCompare(b.Name)).map(u =>
       <ShopItemCard key={u.idItem} item={u} refetchItems={refetchItems} />
     );
 
@@ -94,7 +96,10 @@ export default function ShoppingPage() {
     if (!stores_data) return { unassignedCard: unassCard, shopCards: null };
     
     const storeCards = stores_data.sort((s1, s2) => s1.Name.localeCompare(s2.Name)).map(s => {
-      const storeItems = tripItems.filter(x => x.StoreID === s.idStore).map(i => <ShopItemCard key={i.idItem} item={i} refetchItems={refetchItems} />);
+      const storeItems = tripItems
+        .filter(x => x.StoreID === s.idStore)
+        .sort((a, b) => a.Name.localeCompare(b.Name))
+        .map(i => <ShopItemCard key={i.idItem} item={i} refetchItems={refetchItems} />);
       if (storeItems.length > 0) {
         return <StoreCard key={s.idStore} store={s} itemCards={storeItems} />
       }

@@ -72,14 +72,17 @@ export default function HomePage() {
   const { unassignedItemCards, storeCards } = useMemo(() => {
     if (!items_data) return { unassignedItemCards: [], storeCards: [] };
     const unassignedItems = items_data.filter(x => x.StoreID === null && x.Status !== ItemStatus.Inactive);
-    const unassCards = unassignedItems.map(u =>
+    const unassCards = unassignedItems.sort((a, b) => a.Name.localeCompare(b.Name)).map(u =>
       <ManageItemCard key={u.idItem} item={u} onOpenMenu={openActionMenu} />
     );
 
     if (!stores_data) return { unassignedItemCards: unassCards, storeCards: [] }
     
     const storeCards = stores_data.sort((s1, s2) => s1.Name.localeCompare(s2.Name)).map(s => {
-      const storeItems = items_data.filter(x => x.StoreID === s.idStore && x.Status !== ItemStatus.Inactive).map(i => <ManageItemCard key={i.idItem} item={i} onOpenMenu={openActionMenu} />);
+      const storeItems = items_data
+        .filter(x => x.StoreID === s.idStore && x.Status !== ItemStatus.Inactive)
+        .sort((a, b) => a.Name.localeCompare(b.Name))
+        .map(i => <ManageItemCard key={i.idItem} item={i} onOpenMenu={openActionMenu} />);
       return <StoreCard store={s} itemCards={storeItems} />
     });
 
