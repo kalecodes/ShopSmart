@@ -11,7 +11,7 @@ import Footer from "./components/Footer.jsx";
 export default function App() {
   return (
     <Router>
-      <div>
+      <div className="full-page">
         <Navbar />
         <main>
           <Routes>

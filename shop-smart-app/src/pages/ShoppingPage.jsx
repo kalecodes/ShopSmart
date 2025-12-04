@@ -22,7 +22,6 @@ export default function ShoppingPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(data);
     if (data && data.Status === TripStatus.Active && data.idTrip) {
       setActiveTripId(data.idTrip);
     } else {
@@ -58,17 +57,17 @@ export default function ShoppingPage() {
       stores_data.sort((s1, s2) => s1.Name.localeCompare(s2.Name)).forEach(s => {
         const storeItems = items_data.filter(i => i.StoreID === s.idStore && i.Status !== ItemStatus.Inactive).map(x => x.idItem);
         if (storeItems.length > 0) {
-          options.push(<TripPickerCard label={s.Name} items={storeItems} refetchDash={refetchShoppingDetails}/>)
+          options.push(<TripPickerCard key={`${s.Name}-trip-card`} label={s.Name} items={storeItems} refetchDash={refetchShoppingDetails}/>)
         }
       });
     }
 
     const unassignedItems = items_data.filter(x => x.StoreID === null && x.Status !== ItemStatus.Inactive).map(x => x.idItem);
-    options.push(<TripPickerCard label="Unassigned" items={unassignedItems} refetchDash={refetchShoppingDetails}/>);
+    options.push(<TripPickerCard key="unassigned-trip-card" label="Unassigned" items={unassignedItems} refetchDash={refetchShoppingDetails}/>);
 
     if (stores_data && stores_data.length > 0) {
       const allItems = items_data.filter(i => i.Status !== ItemStatus.Inactive).map(x => x.idItem);
-      options.push(<TripPickerCard label="All" items={allItems} refetchDash={refetchShoppingDetails}/>)
+      options.push(<TripPickerCard key="all-trip-card" label="All" items={allItems} refetchDash={refetchShoppingDetails}/>)
     };
 
     return options;
@@ -79,9 +78,9 @@ export default function ShoppingPage() {
     return items_data.filter(x => trip_items_data.item_ids.includes(x.idItem) && x.Status !== ItemStatus.Inactive);
   }, [JSON.stringify(trip_items_data), JSON.stringify(items_data)]);
 
-  const shopCards = useMemo(() => {
-    const cards = [];
-    if (!items_data || !tripItems.length) return cards;
+  const { unassignedCard, shopCards } = useMemo(() => {
+    let unassCard = null;
+    if (!items_data || !tripItems.length) return { unassignedCard: null, shopCards: null };
 
     const unassignedItems = tripItems.filter(x => x.StoreID === null);
     const unassCards = unassignedItems.map(u =>
@@ -89,23 +88,20 @@ export default function ShoppingPage() {
     );
 
     if (unassignedItems.length > 0) {
-      cards.push(<UnassignedCard itemCards={unassCards} refetchItems={refetchItems} isShop={true}/>)
+      unassCard = <UnassignedCard itemCards={unassCards} refetchItems={refetchItems} isShop={true}/>
     }
 
-    if (!stores_data) return shopCards;
+    if (!stores_data) return { unassignedCard: unassCard, shopCards: null };
     
     const storeCards = stores_data.sort((s1, s2) => s1.Name.localeCompare(s2.Name)).map(s => {
       const storeItems = tripItems.filter(x => x.StoreID === s.idStore).map(i => <ShopItemCard key={i.idItem} item={i} refetchItems={refetchItems} />);
       if (storeItems.length > 0) {
-        return <StoreCard store={s} itemCards={storeItems} />
+        return <StoreCard key={s.idStore} store={s} itemCards={storeItems} />
       }
     });
 
-    cards.push(storeCards);
-
-    return cards;
+    return { unassignedCard: unassCard, shopCards: storeCards };
   }, [tripItems, JSON.stringify(items_data), JSON.stringify(stores_data)]);
-
 
   if (!activeTripId) return (
     <div className="new-trip-page">
@@ -114,7 +110,9 @@ export default function ShoppingPage() {
           ? <h2 className="new-trip-title">Select a store to start a new shopping trip:</h2> 
           : <h2 className="new-trip-title">No items to shop...</h2>
         }
-        {tripOptions}
+        <div className="new-trip-options">
+          {tripOptions}
+        </div>
       </div>
     </div>
 
@@ -122,13 +120,20 @@ export default function ShoppingPage() {
 
   return (
     <div className="shopping-page">
+      {unassignedCard && (
+        <div className="main-column">
+          {unassignedCard}
+        </div>
+      )}
+      <div className="store-cards">
         {shopCards}
-        <button
-          className="end-trip-button"
-          onClick={endTrip}
-        >
-          Complete Trip
-        </button>
+      </div>
+      <button
+        className="end-trip-button"
+        onClick={endTrip}
+      >
+        Complete Trip
+      </button>
     </div>
   );
 }

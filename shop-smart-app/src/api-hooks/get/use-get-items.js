@@ -5,7 +5,6 @@ export function useGetItems() {
     const { data, error, loading, request } = useApi();
     const user_id = localStorage.getItem("userId");
 
-    console.log(user_id)
     const refetch = useCallback(() => {
         if (!user_id) return;
         return request(`/all-items/${user_id}`);

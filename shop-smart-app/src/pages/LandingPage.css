@@ -1,19 +1,21 @@
 .landing-page {
-  max-width: 80vw;
-  margin: 50px auto;
-  padding: 0 20px;
+  /* max-width: 80vw; */
+  width: 100%;
+  height: 100%;
+  /* margin: 50px auto; */
+  /* padding: 0 20px; */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .welcomeLottie {
-  width: 50vw;
+  width: 50%;
 }
 
 .landing-text {
   max-width: 40vw;
-  margin: 50px;
+  margin-top: 0;
   font-size: 18px;
   color: #333;
 }
