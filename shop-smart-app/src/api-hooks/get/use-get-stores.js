@@ -4,9 +4,11 @@ import { useApi } from "../use-api-hook/use-api";
 
 export function useGetStores() {
     const { data, error, loading, request } = useApi();
+    const user_id = localStorage.getItem("userId");
 
     const refetch = useCallback(() => {
-        return request("/stores");
+        if (!user_id) return;
+        return request(`/stores/${user_id}`);
     }, [request]);
 
     useEffect(() => {

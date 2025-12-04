@@ -92,10 +92,10 @@ def add_items():
     item_name = data.get("name")
     store_name = data.get('store')
 
-    user_id = 1 #placeholder
+    user_id = data.get("user_id")
 
-    if not item_name or not store_name:
-        return jsonify({"error": "Missing name or store"}), 400
+    if not item_name or not store_name or not user_id:
+        return jsonify({"error": "Missing name, store, or user id"}), 400
 
     con = get_db_connection()
     cur = con.cursor()
@@ -137,10 +137,10 @@ def get_items():
 
 # Gets a list of all stores
 
-@app.route("/api/stores", methods=["GET"])
-def get_stores():
+@app.route("/api/stores/<string:user_id>", methods=["GET"])
+def get_stores(user_id):
     con = get_db_connection()
-    stores = con.execute("SELECT * From Store").fetchall()
+    stores = con.execute("SELECT * From Store WHERE UserID = ?", (user_id,)).fetchall()
 
     con.close()
     return jsonify([dict(i) for i in stores])
@@ -165,11 +165,14 @@ def get_trips():
 @app.route("/api/trips", methods=["POST"])
 def start_trip():
     data = request.get_json()
-    user_id = data.get("user_id", 1) # placeholder
+    user_id = data.get("user_id") 
     store_id = data.get("store_id")
 
     if not store_id:
         return jsonify({"error" : "Missing store_id"}), 400
+    
+    if not user_id:
+        return jsonify({"error" : "Missing user_id"}), 400
 
     con = get_db_connection()
     cur = con.cursor()
@@ -189,18 +192,17 @@ def start_trip():
 
 # Get the Active Trip
 
-@app.route("/api/trips/active", methods=["GET"])
-def get_active_trip():
-    user_id = 1 # placeholder
+@app.route("/api/trips/active/<int:user_id>", methods=["GET"])
+def get_active_trip(user_id):
 
     con = get_db_connection()
 
     row = con.execute("""
         SELECT Trip.idTrip, Trip.Status
         FROM Trip
-        WHERE Trip.UserID = ? AND Trip.Status = 1
+        WHERE Trip.UserID = ? AND Trip.Status = ?
         LIMIT 1
-        """, (user_id,)).fetchone()
+        """, (user_id,TripStatus.Active.value)).fetchone()
 
     con.close()
 
@@ -236,7 +238,7 @@ def end_trip(trip_id):
 
 @app.route("/api/store/<int:store_id>/items", methods=["GET"])
 def get_items_for_stores(store_id):
-    user_id = 1 # placeholder
+    user_id = request.args.get("user_id", type=int)
 
     con = get_db_connection()
     rows = con.execute("""
@@ -311,16 +313,19 @@ def add_store():
     data = request.get_json()
     store_name = data.get("name")
 
-    user_id = 1
+    user_id = data.get("user_id")
 
     if not store_name:
         return jsonify({"error": "Missing store name"}), 400
+    
+    if not user_id:
+        return jsonify({"error" : "Missing user id"}), 400
     
     con = get_db_connection()
     cur = con.cursor()
 
     # check if store exists
-    existing_store = cur.execute("SELECT Name FROM Store WHERE Name = ?", (store_name,)).fetchone()
+    existing_store = cur.execute("SELECT Name FROM Store WHERE Name = ? AND UserID = ?", (store_name, user_id)).fetchone()
 
     if existing_store:
         return jsonify({ "error": "store already exists"}), 500
@@ -368,11 +373,14 @@ def update_item():
 @app.route("/api/trips/new", methods=["POST"])
 def add_trip():
     data = request.get_json()
-    user_id = data.get("user_id", 1) # placeholder
+    user_id = data.get("user_id") 
     item_ids = data.get("item_ids")
 
     if not item_ids:
         return jsonify({"error" : "Missing Item Ids"}), 400
+    
+    if not user_id:
+        return jsonify({"error" : "Missing user id"}), 400
 
     con = get_db_connection()
     cur = con.cursor()

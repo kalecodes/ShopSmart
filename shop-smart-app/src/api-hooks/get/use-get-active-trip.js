@@ -3,9 +3,11 @@ import { useApi } from "../use-api-hook/use-api";
 
 export function useGetActiveTrip() {
     const { data, error, loading, request } = useApi();
+    const user_id = localStorage.getItem("userId");
 
     const refetch = useCallback(() => {
-        return request("/trips/active");
+        if (!user_id) return;
+        return request(`/trips/active/${user_id}`);
     }, [request]);
 
     useEffect(() => {
