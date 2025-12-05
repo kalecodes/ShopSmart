@@ -167,6 +167,6 @@ Once you have found all your items, you can click the 'Complete Trip' button at 
 - The ability to make a route to plan the order in which the user was going to visit the stores.
 - Improve routing to allow users to type subroutes into the browser
 ### Known Bugs
-- Unresolved ocassional error on new account creation locks database
+- Unresolved ocassional error on new account creation locks database and does not notify user
 - Users can navigate to the sign-up or sign-in pages while already signed in
 
