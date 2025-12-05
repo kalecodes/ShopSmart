@@ -22,45 +22,61 @@ Team Members:
 Recurring Team Meeting: 7PM MT, Every Monday
 
 ## Project Repository
-(https://github.com/kalecodes/ShopSmart)
+[GitHub - ShopSmart](https://github.com/kalecodes/ShopSmart)
 
 ## Project Tracker
-(https://trello.com/b/hBYltvo3/shopsmart-project-tracking)
+[Trello](https://trello.com/b/hBYltvo3/shopsmart-project-tracking)
 
 ## Public Deployment Link
-(https://shopsmart-gina.onrender.com/#/about)
+[ShopSmart](https://shopsmart-gina.onrender.com/)
+
+Test User Credentials: <br>
+Username: SampleUser1 <br>
+Password: 1234567 <br>
+Note: Render becomes idle with inactivity, first request may take up to a minute for the server to restart and execute the request
+
+## Project Presentation
+[ShopSmart Project Presentation](https://o365coloradoedu-my.sharepoint.com/:v:/g/personal/mabi3900_colorado_edu/EQvtDEQ_xG5ClLGs2OIDL2wBmgj1ezafQvUpSKW8cwdsUw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=bQB6cV)
 
 ## Project Demo Link
-...
+[ShopSmart Video Demo](https://o365coloradoedu-my.sharepoint.com/:v:/g/personal/kawi8065_colorado_edu/EbZ8DzL0mOtFgJ7ICjErFj0BxXuwdspa41t_DWXSGxL9sg?e=yHupP9&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
+
 
 ## Web Design
-This project employs six primary pages. By default a person is taken to the about page which details the information about the project itself and can take a user to sign into their accout. If a user wishes to make a new account, they can click the 'Shop Smart' logo in the top left of the page and be taken to the landing page. The landing page contains box which prompts a new user to create a new account. Once a user enters in their email, then there desired username and password, they're taken to the account page which actually lets the user sign into their account. This page will verify the credentails the user inputs and if correct, will take them to the home page. The home page is where the user is allowed to make thier shopping trip. A user can add new items they wish to shop for by going to the add item box, entering an item they want, then clicking add. The new item is then added to an unassigned field indicating that it hasn't been added to a store yet. To make a new store, a user must navigate to the bottom left of the page and click the plus button. Here a user is prompted to enter the name of a new store and when they do and new field will show up on the home page. From here a user can use the arrow next to an item to move it into a new store. Once a user has fully populated their items and store they can go to the trip page. There isn't a direct button that will take a user to the trip page, it must be manually accessed by going the URL and typing 'shop' where 'home' is. https://shopsmart-gina.onrender.com/#/shop The trip page displays all the stores a user input and how many items from each store a user has yet to signn off on. By clicking the arrow next to a given store, the user will be taken to that store's active trip page. This pages displays each item the user intends to buy at the given store and allows them to check them off. Once a user is done with the active store page, they can press the complete trip button in the bottom right and they'll be taken back to the trip page which will be updated with what's left to buy.
+This project employs six primary pages. By default a person is taken to the about page which details the information about the project itself and can take a user to sign into their accout. If a user wishes to make a new account, they can click the 'Shop Smart' logo in the top left of the page and be taken to the landing page. The landing page contains box which prompts a new user to create a new account. Once a user enters in their email, then there desired username and password, they're taken to the account page which actually lets the user sign into their account. This page will verify the credentails the user inputs and if correct, will take them to the home page. The home page is where the user is allowed to make thier shopping trip. A user can add new items they wish to shop for by going to the add item box, entering an item they want, then clicking add. The new item is then added to an unassigned field indicating that it hasn't been added to a store yet. To make a new store, a user must navigate to the bottom left of the page and click the plus button. Here a user is prompted to enter the name of a new store and when they do and new field will show up on the home page. From here a user can use the arrow next to an item to move it into a new store. Once a user has fully populated their items and store they can go to the trip page. There isn't a direct button that will take a user to the trip page, it must be manually accessed by going the URL and typing 'shop' where 'home' is. https://shopsmart-gina.onrender.com/shop The trip page displays all the stores a user input and how many items from each store a user has yet to signn off on. By clicking the arrow next to a given store, the user will be taken to that store's active trip page. This pages displays each item the user intends to buy at the given store and allows them to check them off. Once a user is done with the active store page, they can press the complete trip button in the bottom right and they'll be taken back to the trip page which will be updated with what's left to buy.
+
 ### Landing Page
 <img alt="Landing Page" src="md_images/SS Landing Page.PNG"  width="50%" height="auto">
+<br>
 The page that introduces the project and allows a user to make an account.
 
 ### About Page
 <img alt="About Page" src="md_images/SS About Page.PNG"  width="50%" height="auto">
+<br>
 The page that gives an overview of the project.
 
 ### Account Page
 <img alt="Account Page" src="md_images/SS Sign In Page.PNG"  width="50%" height="auto">
+<br>
 The page that lets a user sign in.
 
 ### Home Page
 <img alt="Home Page" src="md_images/SS Home Page.PNG"  width="50%" height="auto">
+<br>
 The page where a user can create stores and items they wish to shop for and assign items to stores.
 
 ### Trip Page
 <img alt="Trip Page" src="md_images/SS Trip Page.PNG"  width="50%" height="auto">
+<br>
 The page where a user can select with store they're currently shopping at.
 
 ### Active Trip Page
 <img alt="Active Trip Page" src="md_images/SS Active Trip Page.PNG"  width="50%" height="auto">
+<br>
 The page where a user can see what items they're shopping for at the selected store and mark them off.
 
-### Link To Figma Outlining Pages
-(https://www.figma.com/design/1fS3oWBgAqdmRBBDa8sB4V/ShopSmart?node-id=0-1&p=f)
+### Link To WireFrames
+[ShopSmart - Figma](https://www.figma.com/design/1fS3oWBgAqdmRBBDa8sB4V/ShopSmart?node-id=0-1&p=f)
 
 ## Data Base Design
 This project utilizes an sql database to keep track of each user and their respective stores, items, and trips. The sql database has four tables that store this information.
@@ -142,16 +158,15 @@ Once you have found all your items, you can click the 'Complete Trip' button at 
 - The active trip page selects one store and allows the user to mark off an item as they buy it.
 - When items are marked off on the active trip page, those changes are reflected on the trip page.
 ### What Were We in the Middle of Implementing
-- A button that takes a user from the home page to the trip page.
-- CSS and graphical updates to individual pages.
-- More information about features on the about page.
+- Improved UI and styling for a more pleasant and moderne experience.
+- More descriptive and detailed information about features on the about page.
+- Notifying users of errors and loading states in api requests
 ### Future Plans
-- Most of the pages are plain but functional, we were looking to add more CSS and graphics to them.
-- More detail in the About page.
-- Add a create account feature directly in the sign in page.
+- Improved deployment environemnt (Need more computing power for faster processing)
 - The ability to remember items purchased in the past and recommend them to users across trips.
 - The ability to make a route to plan the order in which the user was going to visit the stores.
+- Improve routing to allow users to type subroutes into the browser
 ### Known Bugs
-- There is no ability to move directly from the home page to the trip page.
-- Stores can persist across users when added in the same session.
-- Need to include a '#' before a subroute
+- Unresolved ocassional error on new account creation locks database
+- Users can navigate to the sign-up or sign-in pages while already signed in
+
